@@ -28,9 +28,7 @@ export default function LoginPage() {
       await login(email, password);
       router.push("/dashboard");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al iniciar sesión"
-      );
+      setError(err instanceof Error ? err.message : "Error al iniciar sesión");
     } finally {
       setIsSubmitting(false);
     }
@@ -50,7 +48,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white dark:bg-slate-800 rounded-lg shadow-xl p-8">
         {/* Header */}
         <div className="text-center mb-8">
