@@ -24,18 +24,73 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Verificar sesión al montar componente
   useEffect(() => {
-    checkSession();
+    initializeAuth();
+  }, []);
+
+  async function initializeAuth() {
+    try {
+      setLoading(true);
+      
+      // Primero intentar obtener usuario desde Appwrite (que usa cookies automáticas)
+      const currentUser = await getCurrentUser();
+      
+      if (currentUser) {
+        setUser(currentUser);
+        setError(null);
+        // Guardar en localStorage como fallback
+        localStorage.setItem("authUser", JSON.stringify(currentUser));
+      } else {
+        // Si no hay sesión en Appwrite, limpiar localStorage
+        localStorage.removeItem("authUser");
+        setUser(null);
+      }
+    } catch (err) {
+      // No es un error crítico si no hay sesión
+      setUser(null);
+      localStorage.removeItem("authUser");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Escuchar cambios de visibilidad y focus
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Cuando la pestaña regresa al foco, verificar sesión
+        checkSession();
+      }
+    };
+
+    const handleFocus = () => {
+      // Verificar sesión cuando la ventana recupera el foco
+      checkSession();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("focus", handleFocus);
+    };
   }, []);
 
   async function checkSession() {
     try {
-      setLoading(true);
       const currentUser = await getCurrentUser();
-      setUser(currentUser);
+      if (currentUser) {
+        setUser(currentUser);
+        setError(null);
+        localStorage.setItem("authUser", JSON.stringify(currentUser));
+      } else {
+        setUser(null);
+        localStorage.removeItem("authUser");
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error checking session");
-    } finally {
-      setLoading(false);
+      // Silenciosamente manejar errores de verificación de sesión
+      setUser(null);
+      localStorage.removeItem("authUser");
     }
   }
 
