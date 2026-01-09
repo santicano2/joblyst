@@ -68,10 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setError(null);
       // Redirigir a OAuth de Google en Appwrite
-      await loginWithGoogle(
-        `${window.location.origin}/auth/callback`,
-        `${window.location.origin}/login`
-      );
+      await loginWithGoogle();
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Google login failed";

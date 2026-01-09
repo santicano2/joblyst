@@ -48,16 +48,20 @@ export async function loginUser(
   }
 }
 
-export async function loginWithGoogle(
-  successUrl: string,
-  failureUrl: string
-): Promise<void> {
+export async function loginWithGoogle(): Promise<void> {
   try {
-    await account.createOAuth2Session(
+    const successUrl = `${window.location.origin}/auth/callback`;
+    const failureUrl = `${window.location.origin}/login`;
+    
+    const redirectUrl = await account.createOAuth2Session(
       OAuthProvider.Google,
       successUrl,
       failureUrl
     );
+    
+    if (redirectUrl) {
+      window.location.href = redirectUrl.toString();
+    }
   } catch (error) {
     throw new Error(`OAuth Google fallido: ${error}`);
   }
