@@ -12,6 +12,14 @@ import {
 import ApplicationsTable from "@/components/applications/ApplicationsTable";
 import ApplicationModal from "@/components/applications/ApplicationModal";
 import DeleteConfirmModal from "@/components/applications/DeleteConfirmModal";
+import MonthSelector from "@/components/applications/MonthSelector";
+import QuickAddForm from "@/components/applications/QuickAddForm";
+import StatsOverview from "@/components/applications/StatsOverview";
+import FilterPanel, {
+  FilterValues,
+} from "@/components/applications/FilterPanel";
+import ExportButtons from "@/components/applications/ExportButtons";
+import { getCurrentMonth, filterApplicationsByMonth } from "@/utils/monthUtils";
 import Link from "next/link";
 
 export default function ApplicationsPage() {
@@ -19,6 +27,7 @@ export default function ApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState(getCurrentMonth());
 
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,6 +35,75 @@ export default function ApplicationsPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [appToDelete, setAppToDelete] = useState<Application | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [advancedFilters, setAdvancedFilters] = useState<FilterValues>({
+    search: "",
+    status: "",
+    jobType: "",
+    source: "",
+    location: "",
+    salaryMin: null,
+    salaryMax: null,
+  });
+
+  // Filtrar postulaciones por mes y filtros avanzados
+  const monthFilteredApplications = filterApplicationsByMonth(
+    applications,
+    selectedMonth
+  );
+
+  const filteredApplications = monthFilteredApplications.filter((app) => {
+    // Search filter
+    if (advancedFilters.search) {
+      const search = advancedFilters.search.toLowerCase();
+      if (
+        !app.company.toLowerCase().includes(search) &&
+        !app.jobTitle.toLowerCase().includes(search)
+      ) {
+        return false;
+      }
+    }
+
+    // Status filter
+    if (advancedFilters.status && app.status !== advancedFilters.status) {
+      return false;
+    }
+
+    // Job type filter
+    if (advancedFilters.jobType && app.jobType !== advancedFilters.jobType) {
+      return false;
+    }
+
+    // Source filter
+    if (advancedFilters.source && app.source !== advancedFilters.source) {
+      return false;
+    }
+
+    // Location filter
+    if (advancedFilters.location) {
+      if (
+        !app.location
+          .toLowerCase()
+          .includes(advancedFilters.location.toLowerCase())
+      ) {
+        return false;
+      }
+    }
+
+    // Salary range filter
+    if (advancedFilters.salaryMin && app.salaryMax) {
+      if (app.salaryMax < advancedFilters.salaryMin) {
+        return false;
+      }
+    }
+
+    if (advancedFilters.salaryMax && app.salaryMin) {
+      if (app.salaryMin > advancedFilters.salaryMax) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 
   // Load applications on mount
   useEffect(() => {
@@ -168,22 +246,26 @@ export default function ApplicationsPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-start mb-8 gap-6">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
               Mis Postulaciones
             </h1>
-            <p className="text-slate-600 dark:text-slate-400">
-              Total: {applications.length} postulación
-              {applications.length !== 1 ? "es" : ""}
+            <p className="text-slate-600 dark:text-slate-400 text-sm">
+              Total: {applications.length} | Este mes:{" "}
+              {monthFilteredApplications.length} | Mostrados:{" "}
+              {filteredApplications.length}
             </p>
           </div>
-          <button
-            onClick={openCreateModal}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition cursor-pointer"
-          >
-            + Nueva postulación
-          </button>
+          <div className="flex flex-col gap-3 items-end">
+            <button
+              onClick={openCreateModal}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition cursor-pointer"
+            >
+              + Nueva postulación
+            </button>
+            <ExportButtons applications={filteredApplications} />
+          </div>
         </div>
 
         {/* Error Message */}
@@ -197,6 +279,27 @@ export default function ApplicationsPage() {
               Cerrar
             </button>
           </div>
+        )}
+
+        {/* Filter Panel */}
+        {!isLoading && <FilterPanel onFilterChange={setAdvancedFilters} />}
+
+        {/* Quick Add Form */}
+        {!isLoading && (
+          <QuickAddForm onSubmit={handleCreateOrUpdate} isLoading={isSaving} />
+        )}
+
+        {/* Month Selector */}
+        {!isLoading && (
+          <MonthSelector
+            selectedMonth={selectedMonth}
+            onMonthChange={setSelectedMonth}
+          />
+        )}
+
+        {/* Stats Overview */}
+        {!isLoading && filteredApplications.length > 0 && (
+          <StatsOverview applications={filteredApplications} />
         )}
 
         {/* Loading State */}
@@ -213,7 +316,7 @@ export default function ApplicationsPage() {
           /* Applications Table */
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden">
             <ApplicationsTable
-              applications={applications}
+              applications={filteredApplications}
               onEdit={openEditModal}
               onDelete={openDeleteModal}
               isLoading={isSaving}
