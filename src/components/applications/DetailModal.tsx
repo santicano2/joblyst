@@ -2,6 +2,8 @@
 
 import { Application } from "@/types/applications";
 import { formatDate, formatDateTime } from "@/utils/dateFormatter";
+import { getDownloadURL } from "@/services/storage";
+import { useState } from "react";
 
 interface DetailModalProps {
   isOpen: boolean;
@@ -14,6 +16,9 @@ export default function DetailModal({
   application,
   onClose,
 }: DetailModalProps) {
+  const [cvDownloadUrl, setCVDownloadUrl] = useState<string | null>(null);
+  const [isLoadingCV, setIsLoadingCV] = useState(false);
+
   if (!isOpen || !application) return null;
 
   const formatJobType = (type: string): string => {
@@ -172,6 +177,54 @@ export default function DetailModal({
           )}
 
           <hr className="border-slate-200 dark:border-slate-700" />
+
+          {/* CV Section */}
+          {application.cvFileId && (
+            <>
+              <div>
+                <label className="text-sm font-semibold text-slate-600 dark:text-slate-400 block mb-2">
+                  📄 CV Enviado
+                </label>
+                <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                  <svg
+                    className="w-5 h-5 text-red-600 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
+                  </svg>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-slate-900 dark:text-white">
+                      CV Seleccionado
+                    </p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      ID: {application.cvFileId.substring(0, 8)}...
+                    </p>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      try {
+                        setIsLoadingCV(true);
+                        const url = await getDownloadURL(application.cvFileId!);
+                        setCVDownloadUrl(url);
+                        // Open download
+                        window.open(url, "_blank");
+                      } catch (err) {
+                        console.error("Error downloading CV:", err);
+                      } finally {
+                        setIsLoadingCV(false);
+                      }
+                    }}
+                    disabled={isLoadingCV}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg transition cursor-pointer font-medium text-sm"
+                  >
+                    {isLoadingCV ? "..." : "Descargar"}
+                  </button>
+                </div>
+              </div>
+              <hr className="border-slate-200 dark:border-slate-700" />
+            </>
+          )}
 
           {/* Fechas */}
           <div className="grid grid-cols-2 gap-4">

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Application, CreateApplicationInput } from "@/types/applications";
 import { formatDate } from "@/utils/dateFormatter";
+import { getAllCVs } from "@/services/storage";
 
 interface ApplicationModalProps {
   isOpen: boolean;
@@ -30,8 +31,28 @@ export default function ApplicationModal({
     source: "LinkedIn",
     tags: [],
     link: "",
+    cvFileId: undefined,
   });
   const [error, setError] = useState<string | null>(null);
+  const [cvs, setCVs] = useState<any[]>([]);
+  const [isLoadingCVs, setIsLoadingCVs] = useState(false);
+
+  // Load CVs on mount
+  useEffect(() => {
+    loadCVs();
+  }, []);
+
+  async function loadCVs() {
+    try {
+      setIsLoadingCVs(true);
+      const cvList = await getAllCVs();
+      setCVs(cvList);
+    } catch (err) {
+      console.error("Error loading CVs:", err);
+    } finally {
+      setIsLoadingCVs(false);
+    }
+  }
 
   // Update form data when application changes
   useEffect(() => {
@@ -52,6 +73,7 @@ export default function ApplicationModal({
         notes: application.notes,
         tags: application.tags,
         link: application.link,
+        cvFileId: application.cvFileId,
       });
     } else {
       // Reset form when creating new
@@ -66,6 +88,7 @@ export default function ApplicationModal({
         source: "LinkedIn",
         tags: [],
         link: "",
+        cvFileId: undefined,
       });
     }
     setError(null);
@@ -182,6 +205,44 @@ export default function ApplicationModal({
                 disabled={isLoading}
                 className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
               />
+            </div>
+
+            {/* cvFileId */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                📄 CV que enviaste (opcional)
+              </label>
+              <select
+                value={formData.cvFileId || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    cvFileId: e.target.value || undefined,
+                  })
+                }
+                disabled={isLoading || isLoadingCVs || cvs.length === 0}
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              >
+                <option value="">-- Selecciona un CV --</option>
+                {cvs.map((cv) => (
+                  <option key={cv.$id} value={cv.$id}>
+                    {cv.name}
+                  </option>
+                ))}
+              </select>
+              {cvs.length === 0 && (
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Sube CVs en la{" "}
+                  <a
+                    href="/cvs"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                  >
+                    página de CVs
+                  </a>
+                </p>
+              )}
             </div>
 
             {/* jobType */}

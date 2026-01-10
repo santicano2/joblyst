@@ -31,6 +31,7 @@ export interface Application {
   notes?: string;
   tags: string[];
   link?: string;
+  cvFileId?: string;
   $createdAt: string;
   $updatedAt: string;
 }
@@ -51,6 +52,7 @@ export interface CreateApplicationInput {
   notes?: string;
   tags?: string[];
   link?: string;
+  cvFileId?: string;
 }
 
 export interface UpdateApplicationInput

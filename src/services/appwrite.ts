@@ -19,6 +19,7 @@ export const APPWRITE_CONSTANTS = {
   databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "",
   applicationCollectionId:
     process.env.NEXT_PUBLIC_APPWRITE_APPLICATIONS_COLLECTION_ID || "",
+  cvsBucketId: process.env.NEXT_PUBLIC_APPWRITE_CVS_BUCKET_ID || "",
 };
 
 export default client;
