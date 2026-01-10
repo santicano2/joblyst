@@ -187,7 +187,7 @@ export default function DetailModal({
                 </label>
                 <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
                   <svg
-                    className="w-5 h-5 text-red-600 flex-shrink-0"
+                    className="w-5 h-5 text-red-600 shrink-0"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >

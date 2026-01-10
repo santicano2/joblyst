@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/authContext";
+import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -38,5 +39,12 @@ export default function ProtectedLayout({
     return null;
   }
 
-  return <>{children}</>;
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <Navbar />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {children}
+      </main>
+    </div>
+  );
 }
