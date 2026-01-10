@@ -12,6 +12,7 @@ import {
 import ApplicationsTable from "@/components/applications/ApplicationsTable";
 import ApplicationModal from "@/components/applications/ApplicationModal";
 import DeleteConfirmModal from "@/components/applications/DeleteConfirmModal";
+import DetailModal from "@/components/applications/DetailModal";
 import MonthSelector from "@/components/applications/MonthSelector";
 import QuickAddForm from "@/components/applications/QuickAddForm";
 import StatsOverview from "@/components/applications/StatsOverview";
@@ -35,6 +36,10 @@ export default function ApplicationsPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [appToDelete, setAppToDelete] = useState<Application | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedDetail, setSelectedDetail] = useState<Application | null>(
+    null
+  );
   const [advancedFilters, setAdvancedFilters] = useState<FilterValues>({
     search: "",
     status: "",
@@ -194,6 +199,11 @@ export default function ApplicationsPage() {
     setIsDeleteModalOpen(true);
   }
 
+  function openDetailModal(app: Application) {
+    setSelectedDetail(app);
+    setIsDetailModalOpen(true);
+  }
+
   async function handleLogout() {
     try {
       await logout();
@@ -319,6 +329,7 @@ export default function ApplicationsPage() {
               applications={filteredApplications}
               onEdit={openEditModal}
               onDelete={openDeleteModal}
+              onView={openDetailModal}
               isLoading={isSaving}
             />
           </div>
@@ -346,6 +357,15 @@ export default function ApplicationsPage() {
           setAppToDelete(null);
         }}
         isLoading={isSaving}
+      />
+
+      <DetailModal
+        isOpen={isDetailModalOpen}
+        application={selectedDetail}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedDetail(null);
+        }}
       />
     </div>
   );

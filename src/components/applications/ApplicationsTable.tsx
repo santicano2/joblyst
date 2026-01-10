@@ -7,6 +7,7 @@ interface ApplicationsTableProps {
   applications: Application[];
   onEdit: (app: Application) => void;
   onDelete: (app: Application) => void;
+  onView: (app: Application) => void;
   isLoading: boolean;
 }
 
@@ -29,6 +30,7 @@ export default function ApplicationsTable({
   applications,
   onEdit,
   onDelete,
+  onView,
   isLoading,
 }: ApplicationsTableProps) {
   if (applications.length === 0) {
@@ -95,6 +97,13 @@ export default function ApplicationsTable({
               </td>
               <td className="px-6 py-4 text-right">
                 <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => onView(app)}
+                    disabled={isLoading}
+                    className="px-3 py-1 text-sm bg-slate-600 hover:bg-slate-700 disabled:bg-slate-400 text-white rounded transition cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    Ver
+                  </button>
                   <button
                     onClick={() => onEdit(app)}
                     disabled={isLoading}

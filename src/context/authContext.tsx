@@ -30,10 +30,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function initializeAuth() {
     try {
       setLoading(true);
-      
+
       // Primero intentar obtener usuario desde Appwrite (que usa cookies automáticas)
       const currentUser = await getCurrentUser();
-      
+
       if (currentUser) {
         setUser(currentUser);
         setError(null);
