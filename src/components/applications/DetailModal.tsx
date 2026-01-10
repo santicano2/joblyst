@@ -128,6 +128,49 @@ export default function DetailModal({
             </div>
           </div>
 
+          {/* Link */}
+          {application.link && (
+            <>
+              <hr className="border-slate-200 dark:border-slate-700" />
+              <div>
+                <label className="text-sm font-semibold text-slate-600 dark:text-slate-400 block mb-2">
+                  URL de la Postulación
+                </label>
+                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg">
+                  <a
+                    href={application.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 text-blue-600 dark:text-blue-400 hover:underline break-all text-sm"
+                  >
+                    {application.link}
+                  </a>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(application.link || "");
+                    }}
+                    title="Copiar al portapapeles"
+                    className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition cursor-pointer"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
           <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Fechas */}

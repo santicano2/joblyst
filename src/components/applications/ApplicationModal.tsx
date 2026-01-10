@@ -36,6 +36,7 @@ export default function ApplicationModal({
           source: application.source,
           notes: application.notes,
           tags: application.tags,
+          link: application.link,
         }
       : {
           jobTitle: "",
@@ -47,6 +48,7 @@ export default function ApplicationModal({
           responseReceived: false,
           source: "LinkedIn",
           tags: [],
+          link: "",
         }
   );
   const [error, setError] = useState<string | null>(null);
@@ -142,6 +144,23 @@ export default function ApplicationModal({
                   setFormData({ ...formData, location: e.target.value })
                 }
                 placeholder="Buenos Aires, Argentina"
+                disabled={isLoading}
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              />
+            </div>
+
+            {/* link */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                URL de la postulación
+              </label>
+              <input
+                type="url"
+                value={formData.link || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, link: e.target.value })
+                }
+                placeholder="https://linkedin.com/jobs/123..."
                 disabled={isLoading}
                 className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
               />

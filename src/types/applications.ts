@@ -30,6 +30,7 @@ export interface Application {
   source: JobSource;
   notes?: string;
   tags: string[];
+  link?: string;
   $createdAt: string;
   $updatedAt: string;
 }
@@ -49,6 +50,7 @@ export interface CreateApplicationInput {
   source: JobSource;
   notes?: string;
   tags?: string[];
+  link?: string;
 }
 
 export interface UpdateApplicationInput

@@ -16,6 +16,7 @@ export default function QuickAddForm({
   const [formData, setFormData] = useState({
     company: "",
     jobTitle: "",
+    link: "",
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -32,6 +33,7 @@ export default function QuickAddForm({
       await onSubmit({
         company: formData.company,
         jobTitle: formData.jobTitle,
+        link: formData.link || undefined,
         location: "Por especificar",
         jobType: "full-time",
         status: "applied",
@@ -41,7 +43,7 @@ export default function QuickAddForm({
         tags: [],
       });
 
-      setFormData({ company: "", jobTitle: "" });
+      setFormData({ company: "", jobTitle: "", link: "" });
       setIsExpanded(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al guardar");
@@ -107,6 +109,22 @@ export default function QuickAddForm({
             </div>
           </div>
 
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              URL de la postulación (opcional)
+            </label>
+            <input
+              type="url"
+              value={formData.link}
+              onChange={(e) =>
+                setFormData({ ...formData, link: e.target.value })
+              }
+              placeholder="https://linkedin.com/jobs/123..."
+              disabled={isLoading}
+              className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+            />
+          </div>
+
           <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
             💡 Tip: Completa los demás datos después en &quot;Editar&quot;
           </p>
@@ -123,7 +141,7 @@ export default function QuickAddForm({
               type="button"
               onClick={() => {
                 setIsExpanded(false);
-                setFormData({ company: "", jobTitle: "" });
+                setFormData({ company: "", jobTitle: "", link: "" });
                 setError(null);
               }}
               disabled={isLoading}
