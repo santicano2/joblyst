@@ -50,10 +50,10 @@ export default function DetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fadeIn">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scaleIn">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 px-6 py-6 flex justify-between items-start">
+        <div className="sticky top-0 bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 px-6 py-6 flex justify-between items-start">
           <div>
             <h2 className="text-2xl font-bold text-white mb-1">
               {application.jobTitle}
@@ -301,7 +301,7 @@ export default function DetailModal({
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-slate-50 dark:bg-slate-900/50 px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex justify-end">
+        <div className="sticky bottom-0 bg-white dark:bg-slate-800 px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex justify-end">
           <button
             onClick={onClose}
             className="px-6 py-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600 text-slate-900 dark:text-white rounded-lg transition cursor-pointer font-medium"

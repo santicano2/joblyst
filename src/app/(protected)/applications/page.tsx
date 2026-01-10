@@ -21,6 +21,16 @@ import FilterPanel, {
 } from "@/components/applications/FilterPanel";
 import ExportButtons from "@/components/applications/ExportButtons";
 import { getCurrentMonth, filterApplicationsByMonth } from "@/utils/monthUtils";
+import {
+  showSuccessToast,
+  showErrorToast,
+  showLoadingToast,
+  dismissToast,
+} from "@/utils/toast";
+import {
+  TableSkeleton,
+  StatsOverviewSkeleton,
+} from "@/components/common/Skeleton";
 import Link from "next/link";
 
 export default function ApplicationsPage() {
@@ -140,6 +150,7 @@ export default function ApplicationsPage() {
 
       if (selectedApp) {
         // Actualizar
+        const toastId = showLoadingToast("Actualizando postulación...");
         const updated = await updateApplication({
           $id: selectedApp.$id,
           ...data,
@@ -147,18 +158,24 @@ export default function ApplicationsPage() {
         setApplications((prev) =>
           prev.map((app) => (app.$id === updated.$id ? updated : app))
         );
+        dismissToast(toastId);
+        showSuccessToast("Postulación actualizada ✨");
       } else {
         // Crear
+        const toastId = showLoadingToast("Creando postulación...");
         const created = await createApplication(user.id, data);
         setApplications((prev) => [created, ...prev]);
+        dismissToast(toastId);
+        showSuccessToast("Postulación creada exitosamente ✨");
       }
 
       setSelectedApp(null);
       setIsModalOpen(false);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al guardar postulación"
-      );
+      const message =
+        err instanceof Error ? err.message : "Error al guardar postulación";
+      showErrorToast(message);
+      setError(message);
     } finally {
       setIsSaving(false);
     }
@@ -169,16 +186,20 @@ export default function ApplicationsPage() {
 
     try {
       setIsSaving(true);
+      const toastId = showLoadingToast("Eliminando postulación...");
       await deleteApplication(appToDelete.$id);
       setApplications((prev) =>
         prev.filter((app) => app.$id !== appToDelete.$id)
       );
+      dismissToast(toastId);
+      showSuccessToast("Postulación eliminada");
       setAppToDelete(null);
       setIsDeleteModalOpen(false);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al eliminar postulación"
-      );
+      const message =
+        err instanceof Error ? err.message : "Error al eliminar postulación";
+      showErrorToast(message);
+      setError(message);
     } finally {
       setIsSaving(false);
     }
@@ -213,7 +234,7 @@ export default function ApplicationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
       {/* Navigation */}
       <nav className="bg-white dark:bg-slate-800 shadow-sm border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -234,6 +255,12 @@ export default function ApplicationsPage() {
               <span className="text-slate-600 dark:text-slate-400 font-semibold">
                 Postulaciones
               </span>
+              <Link
+                href="/analytics"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
+              >
+                Analytics
+              </Link>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -308,20 +335,15 @@ export default function ApplicationsPage() {
         )}
 
         {/* Stats Overview */}
-        {!isLoading && filteredApplications.length > 0 && (
+        {isLoading ? (
+          <StatsOverviewSkeleton />
+        ) : filteredApplications.length > 0 ? (
           <StatsOverview applications={filteredApplications} />
-        )}
+        ) : null}
 
         {/* Loading State */}
         {isLoading ? (
-          <div className="flex justify-center py-12">
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-              <p className="text-slate-600 dark:text-slate-400">
-                Cargando postulaciones...
-              </p>
-            </div>
-          </div>
+          <TableSkeleton />
         ) : (
           /* Applications Table */
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden">
@@ -332,6 +354,18 @@ export default function ApplicationsPage() {
               onView={openDetailModal}
               isLoading={isSaving}
             />
+          </div>
+        )}
+
+        {/* Link to Analytics */}
+        {!isLoading && filteredApplications.length > 0 && (
+          <div className="mt-12 text-center">
+            <Link
+              href="/analytics"
+              className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-lg transition cursor-pointer"
+            >
+              📊 Ver Analytics Detallados
+            </Link>
           </div>
         )}
       </main>

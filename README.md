@@ -2,5 +2,6 @@
 
 ## TODO:
 
-- Arreglar scroll detailModal
-- Bug editar trae datos anteriores
+- Mejorar CSV
+- Cambiar iconos por SVG
+- Añadir postulaciones solas. (extensión?)

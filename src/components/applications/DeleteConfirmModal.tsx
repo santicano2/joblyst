@@ -18,8 +18,8 @@ export default function DeleteConfirmModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 max-w-md w-full">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fadeIn">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 max-w-md w-full animate-scaleIn">
         <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
           ¿Eliminar postulación?
         </h2>

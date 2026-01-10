@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Application, CreateApplicationInput } from "@/types/applications";
 import { formatDate } from "@/utils/dateFormatter";
 
@@ -19,39 +19,57 @@ export default function ApplicationModal({
   onSubmit,
   isLoading,
 }: ApplicationModalProps) {
-  const [formData, setFormData] = useState<CreateApplicationInput>(
-    application
-      ? {
-          jobTitle: application.jobTitle,
-          company: application.company,
-          location: application.location,
-          jobType: application.jobType,
-          salaryMin: application.salaryMin,
-          salaryMax: application.salaryMax,
-          salaryCurrency: application.salaryCurrency,
-          status: application.status,
-          dateApplied: application.dateApplied,
-          responseReceived: application.responseReceived,
-          interviewDate: application.interviewDate,
-          source: application.source,
-          notes: application.notes,
-          tags: application.tags,
-          link: application.link,
-        }
-      : {
-          jobTitle: "",
-          company: "",
-          location: "",
-          jobType: "full-time",
-          status: "applied",
-          dateApplied: new Date().toISOString().split("T")[0],
-          responseReceived: false,
-          source: "LinkedIn",
-          tags: [],
-          link: "",
-        }
-  );
+  const [formData, setFormData] = useState<CreateApplicationInput>({
+    jobTitle: "",
+    company: "",
+    location: "",
+    jobType: "full-time",
+    status: "applied",
+    dateApplied: new Date().toISOString().split("T")[0],
+    responseReceived: false,
+    source: "LinkedIn",
+    tags: [],
+    link: "",
+  });
   const [error, setError] = useState<string | null>(null);
+
+  // Update form data when application changes
+  useEffect(() => {
+    if (application) {
+      setFormData({
+        jobTitle: application.jobTitle,
+        company: application.company,
+        location: application.location,
+        jobType: application.jobType,
+        salaryMin: application.salaryMin,
+        salaryMax: application.salaryMax,
+        salaryCurrency: application.salaryCurrency,
+        status: application.status,
+        dateApplied: application.dateApplied,
+        responseReceived: application.responseReceived,
+        interviewDate: application.interviewDate,
+        source: application.source,
+        notes: application.notes,
+        tags: application.tags,
+        link: application.link,
+      });
+    } else {
+      // Reset form when creating new
+      setFormData({
+        jobTitle: "",
+        company: "",
+        location: "",
+        jobType: "full-time",
+        status: "applied",
+        dateApplied: new Date().toISOString().split("T")[0],
+        responseReceived: false,
+        source: "LinkedIn",
+        tags: [],
+        link: "",
+      });
+    }
+    setError(null);
+  }, [application, isOpen]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -73,8 +91,8 @@ export default function ApplicationModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fadeIn">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scaleIn">
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
