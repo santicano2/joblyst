@@ -1,6 +1,7 @@
 "use client";
 
 import { Application } from "@/types/applications";
+import { isInterviewSoon } from "@/utils/interviewUtils";
 
 interface StatsCardProps {
   title: string;
@@ -58,8 +59,12 @@ export default function StatsOverview({ applications }: StatsOverviewProps) {
       ? Math.round(((interviews + offers + rejected) / total) * 100)
       : 0;
 
+  const upcomingInterviews = applications.filter((a) =>
+    isInterviewSoon(a.interviewDate)
+  ).length;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <StatsCard
         title="Total de postulaciones"
         value={total}
@@ -72,6 +77,12 @@ export default function StatsOverview({ applications }: StatsOverviewProps) {
         value={interviews}
         icon="👤"
         color="yellow"
+      />
+      <StatsCard
+        title="Próximas entrevistas"
+        value={upcomingInterviews}
+        icon="🔔"
+        color={upcomingInterviews > 0 ? "red" : "blue"}
       />
       <StatsCard title="Ofertas" value={offers} icon="🎉" color="green" />
       <StatsCard title="Rechazadas" value={rejected} icon="❌" color="red" />

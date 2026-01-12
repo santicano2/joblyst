@@ -2,6 +2,7 @@
 
 import { Application } from "@/types/applications";
 import { formatDate } from "@/utils/dateFormatter";
+import { isInterviewSoon, isInterviewToday } from "@/utils/interviewUtils";
 
 interface ApplicationsTableProps {
   applications: Application[];
@@ -84,13 +85,31 @@ export default function ApplicationsTable({
                 {app.location}
               </td>
               <td className="px-6 py-4">
-                <span
-                  className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                    statusColors[app.status as keyof typeof statusColors]
-                  }`}
-                >
-                  {statusLabels[app.status as keyof typeof statusLabels]}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                      statusColors[app.status as keyof typeof statusColors]
+                    }`}
+                  >
+                    {statusLabels[app.status as keyof typeof statusLabels]}
+                  </span>
+                  {isInterviewSoon(app.interviewDate) && (
+                    <span
+                      title={
+                        isInterviewToday(app.interviewDate)
+                          ? "¡Entrevista hoy!"
+                          : "Entrevista próxima"
+                      }
+                      className={`px-2 py-1 rounded text-xs font-bold ${
+                        isInterviewToday(app.interviewDate)
+                          ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 animate-pulse"
+                          : "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300"
+                      }`}
+                    >
+                      🔔
+                    </span>
+                  )}
+                </div>
               </td>
               <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">
                 {formatDate(app.dateApplied)}

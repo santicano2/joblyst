@@ -31,6 +31,7 @@ import {
   TableSkeleton,
   StatsOverviewSkeleton,
 } from "@/components/common/Skeleton";
+import { isInterviewToday } from "@/utils/interviewUtils";
 import Link from "next/link";
 
 export default function ApplicationsPage() {
@@ -133,6 +134,20 @@ export default function ApplicationsPage() {
       setError(null);
       const data = await getApplications(user.id);
       setApplications(data);
+
+      // Check for interviews today
+      const interviewsToday = data.filter((app) =>
+        isInterviewToday(app.interviewDate)
+      );
+
+      if (interviewsToday.length > 0) {
+        const names = interviewsToday
+          .map((app) => `${app.company} - ${app.jobTitle}`)
+          .join(", ");
+        showSuccessToast(
+          `🔔 ¡Tienes ${interviewsToday.length} entrevista(s) hoy! ${names}`
+        );
+      }
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Error al cargar postulaciones"
@@ -229,90 +244,90 @@ export default function ApplicationsPage() {
     <div>
       {/* Header */}
       <div className="flex justify-between items-start mb-8 gap-6">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-              Mis Postulaciones
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-sm">
-              Total: {applications.length} | Este mes:{" "}
-              {monthFilteredApplications.length} | Mostrados:{" "}
-              {filteredApplications.length}
-            </p>
-          </div>
-          <div className="flex flex-col gap-3 items-end">
-            <button
-              onClick={openCreateModal}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition cursor-pointer"
-            >
-              + Nueva postulación
-            </button>
-            <ExportButtons applications={filteredApplications} />
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
+            Mis Postulaciones
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400 text-sm">
+            Total: {applications.length} | Este mes:{" "}
+            {monthFilteredApplications.length} | Mostrados:{" "}
+            {filteredApplications.length}
+          </p>
         </div>
+        <div className="flex flex-col gap-3 items-end">
+          <button
+            onClick={openCreateModal}
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition cursor-pointer"
+          >
+            + Nueva postulación
+          </button>
+          <ExportButtons applications={filteredApplications} />
+        </div>
+      </div>
 
-        {/* Error Message */}
-        {error && (
-          <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg">
-            {error}
-            <button
-              onClick={() => setError(null)}
-              className="ml-4 text-sm font-medium underline cursor-pointer"
-            >
-              Cerrar
-            </button>
-          </div>
-        )}
+      {/* Error Message */}
+      {error && (
+        <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg">
+          {error}
+          <button
+            onClick={() => setError(null)}
+            className="ml-4 text-sm font-medium underline cursor-pointer"
+          >
+            Cerrar
+          </button>
+        </div>
+      )}
 
-        {/* Filter Panel */}
-        {!isLoading && <FilterPanel onFilterChange={setAdvancedFilters} />}
+      {/* Filter Panel */}
+      {!isLoading && <FilterPanel onFilterChange={setAdvancedFilters} />}
 
-        {/* Quick Add Form */}
-        {!isLoading && (
-          <QuickAddForm onSubmit={handleCreateOrUpdate} isLoading={isSaving} />
-        )}
+      {/* Quick Add Form */}
+      {!isLoading && (
+        <QuickAddForm onSubmit={handleCreateOrUpdate} isLoading={isSaving} />
+      )}
 
-        {/* Month Selector */}
-        {!isLoading && (
-          <MonthSelector
-            selectedMonth={selectedMonth}
-            onMonthChange={setSelectedMonth}
+      {/* Month Selector */}
+      {!isLoading && (
+        <MonthSelector
+          selectedMonth={selectedMonth}
+          onMonthChange={setSelectedMonth}
+        />
+      )}
+
+      {/* Stats Overview */}
+      {isLoading ? (
+        <StatsOverviewSkeleton />
+      ) : filteredApplications.length > 0 ? (
+        <StatsOverview applications={filteredApplications} />
+      ) : null}
+
+      {/* Loading State */}
+      {isLoading ? (
+        <TableSkeleton />
+      ) : (
+        /* Applications Table */
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden">
+          <ApplicationsTable
+            applications={filteredApplications}
+            onEdit={openEditModal}
+            onDelete={openDeleteModal}
+            onView={openDetailModal}
+            isLoading={isSaving}
           />
-        )}
+        </div>
+      )}
 
-        {/* Stats Overview */}
-        {isLoading ? (
-          <StatsOverviewSkeleton />
-        ) : filteredApplications.length > 0 ? (
-          <StatsOverview applications={filteredApplications} />
-        ) : null}
-
-        {/* Loading State */}
-        {isLoading ? (
-          <TableSkeleton />
-        ) : (
-          /* Applications Table */
-          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden">
-            <ApplicationsTable
-              applications={filteredApplications}
-              onEdit={openEditModal}
-              onDelete={openDeleteModal}
-              onView={openDetailModal}
-              isLoading={isSaving}
-            />
-          </div>
-        )}
-
-        {/* Link to Analytics */}
-        {!isLoading && filteredApplications.length > 0 && (
-          <div className="mt-12 text-center">
-            <Link
-              href="/analytics"
-              className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-lg transition cursor-pointer"
-            >
-              📊 Ver Analytics Detallados
-            </Link>
-          </div>
-        )}
+      {/* Link to Analytics */}
+      {!isLoading && filteredApplications.length > 0 && (
+        <div className="mt-12 text-center">
+          <Link
+            href="/analytics"
+            className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-lg transition cursor-pointer"
+          >
+            📊 Ver Analytics Detallados
+          </Link>
+        </div>
+      )}
 
       {/* Modals */}
       <ApplicationModal
