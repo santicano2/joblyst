@@ -1,12 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/authContext";
 import { Application } from "@/types/applications";
 import { getApplications } from "@/services/applications";
-import Charts from "@/components/applications/Charts";
 import { StatsOverviewSkeleton } from "@/components/common/Skeleton";
 import Link from "next/link";
+
+// Lazy load Charts component (can be heavy with visualizations)
+const Charts = dynamic(() => import("@/components/applications/Charts"), {
+  ssr: false,
+  loading: () => <StatsOverviewSkeleton />,
+});
 
 export default function AnalyticsPage() {
   const { user } = useAuth();

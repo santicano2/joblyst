@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/authContext";
 import { Application, CreateApplicationInput } from "@/types/applications";
@@ -11,15 +12,9 @@ import {
   toggleFavorite,
 } from "@/services/applications";
 import ApplicationsTable from "@/components/applications/ApplicationsTable";
-import ApplicationModal from "@/components/applications/ApplicationModal";
-import DeleteConfirmModal from "@/components/applications/DeleteConfirmModal";
-import DetailModal from "@/components/applications/DetailModal";
 import MonthSelector from "@/components/applications/MonthSelector";
 import QuickAddForm from "@/components/applications/QuickAddForm";
 import StatsOverview from "@/components/applications/StatsOverview";
-import FilterPanel, {
-  FilterValues,
-} from "@/components/applications/FilterPanel";
 import ExportButtons from "@/components/applications/ExportButtons";
 import { getCurrentMonth, filterApplicationsByMonth } from "@/utils/monthUtils";
 import {
@@ -35,6 +30,30 @@ import {
 import EmptyState from "@/components/common/EmptyState";
 import { isInterviewToday } from "@/utils/interviewUtils";
 import Link from "next/link";
+
+// Lazy load heavy modals
+const ApplicationModal = dynamic(
+  () => import("@/components/applications/ApplicationModal"),
+  { ssr: false }
+);
+const DeleteConfirmModal = dynamic(
+  () => import("@/components/applications/DeleteConfirmModal"),
+  { ssr: false }
+);
+const DetailModal = dynamic(
+  () => import("@/components/applications/DetailModal"),
+  { ssr: false }
+);
+const FilterPanel = dynamic(
+  () =>
+    import("@/components/applications/FilterPanel").then((mod) => ({
+      default: mod.default,
+    })),
+  { ssr: false }
+);
+
+// Import FilterValues type
+import type { FilterValues } from "@/components/applications/FilterPanel";
 
 export default function ApplicationsPage() {
   const { user, logout } = useAuth();
@@ -334,7 +353,9 @@ export default function ApplicationsPage() {
               ? "Comienza a registrar tus postulaciones de empleo para organizarte mejor."
               : "No hay postulaciones que coincidan con tus filtros. Intenta ajustar los criterios de búsqueda."
           }
-          actionLabel={applications.length === 0 ? "+ Nueva postulación" : undefined}
+          actionLabel={
+            applications.length === 0 ? "+ Nueva postulación" : undefined
+          }
           onAction={applications.length === 0 ? openCreateModal : undefined}
         />
       ) : (
