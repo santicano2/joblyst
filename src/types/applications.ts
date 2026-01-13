@@ -16,6 +16,7 @@ export type SalaryCurrency = "USD" | "ARS" | "EUR";
 export interface Application {
   $id: string;
   userId: string;
+  userEmail?: string;
   jobTitle: string;
   company: string;
   location: string;
@@ -55,6 +56,7 @@ export interface CreateApplicationInput {
   link?: string;
   cvFileId?: string;
   isFavorite?: boolean;
+  userEmail?: string;
 }
 
 export interface UpdateApplicationInput
