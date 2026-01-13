@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CreateApplicationInput } from "@/types/applications";
+import { toast } from "sonner";
 
 interface QuickAddFormProps {
   onSubmit: (data: CreateApplicationInput) => Promise<void>;
@@ -13,12 +14,51 @@ export default function QuickAddForm({
   isLoading,
 }: QuickAddFormProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [parsingUrl, setParsingUrl] = useState(false);
   const [formData, setFormData] = useState({
     company: "",
     jobTitle: "",
     link: "",
+    location: "",
   });
   const [error, setError] = useState<string | null>(null);
+
+  async function handleParseLink() {
+    if (!formData.link) {
+      toast.error("Pega un link primero");
+      return;
+    }
+
+    setParsingUrl(true);
+    try {
+      const response = await fetch("/api/parse-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: formData.link }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        toast.error(result.error || "Error al extraer datos");
+        return;
+      }
+
+      // Auto-llenar campos detectados
+      setFormData((prev) => ({
+        ...prev,
+        jobTitle: result.data.jobTitle || prev.jobTitle,
+        company: result.data.company || prev.company,
+        location: result.data.location || prev.location || "",
+      }));
+
+      toast.success("✅ Datos extraídos correctamente");
+    } catch (err) {
+      toast.error("Error al procesar el link");
+    } finally {
+      setParsingUrl(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,7 +74,7 @@ export default function QuickAddForm({
         company: formData.company,
         jobTitle: formData.jobTitle,
         link: formData.link || undefined,
-        location: "Por especificar",
+        location: formData.location || "Por especificar",
         jobType: "full-time",
         status: "applied",
         dateApplied: new Date().toISOString().split("T")[0],
@@ -43,7 +83,7 @@ export default function QuickAddForm({
         tags: [],
       });
 
-      setFormData({ company: "", jobTitle: "", link: "" });
+      setFormData({ company: "", jobTitle: "", link: "", location: "" });
       setIsExpanded(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al guardar");
@@ -113,17 +153,37 @@ export default function QuickAddForm({
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               URL de la postulación (opcional)
             </label>
-            <input
-              type="url"
-              value={formData.link}
-              onChange={(e) =>
-                setFormData({ ...formData, link: e.target.value })
-              }
-              placeholder="https://linkedin.com/jobs/123..."
-              disabled={isLoading}
-              className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-            />
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={formData.link}
+                onChange={(e) =>
+                  setFormData({ ...formData, link: e.target.value })
+                }
+                placeholder="https://linkedin.com/jobs/123..."
+                disabled={isLoading || parsingUrl}
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              />
+              <button
+                type="button"
+                onClick={handleParseLink}
+                disabled={isLoading || parsingUrl || !formData.link}
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition cursor-pointer disabled:cursor-not-allowed"
+                title="Extrae datos automáticamente del link"
+              >
+                {parsingUrl ? "🔄" : "🔗"}
+              </button>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              💡 Pega un link y haz click 🔗 para extraer datos automáticamente
+            </p>
           </div>
+
+          {formData.location && (
+            <div className="mb-4 p-2 bg-green-100 dark:bg-green-900/30 rounded text-sm text-green-700 dark:text-green-300">
+              ✓ Ubicación detectada: {formData.location}
+            </div>
+          )}
 
           <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
             💡 Tip: Completa los demás datos después en &quot;Editar&quot;
@@ -141,7 +201,12 @@ export default function QuickAddForm({
               type="button"
               onClick={() => {
                 setIsExpanded(false);
-                setFormData({ company: "", jobTitle: "", link: "" });
+                setFormData({
+                  company: "",
+                  jobTitle: "",
+                  link: "",
+                  location: "",
+                });
                 setError(null);
               }}
               disabled={isLoading}

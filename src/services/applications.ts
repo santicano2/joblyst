@@ -11,18 +11,26 @@ import {
 } from "@/types/applications";
 import { APPWRITE_CONSTANTS } from "./appwrite";
 import { Query } from "appwrite";
+import { getCurrentUser } from "./auth";
 
 export async function createApplication(
   userId: string,
   data: CreateApplicationInput
 ): Promise<Application> {
   try {
+    // Obtener el email del usuario autenticado
+    const currentUser = await getCurrentUser();
+    if (!currentUser?.email) {
+      throw new Error("No se pudo obtener el email del usuario");
+    }
+
     const response = await databases.createDocument(
       APPWRITE_CONSTANTS.databaseId,
       APPWRITE_CONSTANTS.applicationCollectionId,
       "unique()",
       {
         userId,
+        userEmail: currentUser.email,
         ...data,
         responseReceived: data.responseReceived ?? false,
         tags: data.tags ?? [],
