@@ -29,6 +29,7 @@ import {
 } from "@/components/common/Skeleton";
 import EmptyState from "@/components/common/EmptyState";
 import { isInterviewToday } from "@/utils/interviewUtils";
+import { getFriendlyErrorMessage } from "@/utils/errorMessages";
 import Link from "next/link";
 
 // Lazy load heavy modals
@@ -176,9 +177,8 @@ export default function ApplicationsPage() {
         );
       }
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al cargar postulaciones"
-      );
+      const friendlyMessage = getFriendlyErrorMessage(err);
+      setError(friendlyMessage);
     } finally {
       setIsLoading(false);
     }
@@ -214,10 +214,9 @@ export default function ApplicationsPage() {
       setSelectedApp(null);
       setIsModalOpen(false);
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Error al guardar postulación";
-      showErrorToast(message);
-      setError(message);
+      const friendlyMessage = getFriendlyErrorMessage(err);
+      showErrorToast(friendlyMessage);
+      setError(friendlyMessage);
     } finally {
       setIsSaving(false);
     }
@@ -238,10 +237,9 @@ export default function ApplicationsPage() {
       setAppToDelete(null);
       setIsDeleteModalOpen(false);
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Error al eliminar postulación";
-      showErrorToast(message);
-      setError(message);
+      const friendlyMessage = getFriendlyErrorMessage(err);
+      showErrorToast(friendlyMessage);
+      setError(friendlyMessage);
     } finally {
       setIsSaving(false);
     }

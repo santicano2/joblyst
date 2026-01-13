@@ -5,6 +5,9 @@ import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginWithGoogle } from "@/services/auth";
+import LoadingButton from "@/components/common/LoadingButton";
+import { UserPlus } from "lucide-react";
+import { getFriendlyErrorMessage } from "@/utils/errorMessages";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -54,9 +57,9 @@ export default function RegisterPage() {
     try {
       setIsSubmitting(true);
       await register(formData.email, formData.password, formData.name);
-      router.push("/dashboard");
+      router.push("/applications");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al registrarse");
+      setError(getFriendlyErrorMessage(err));
     } finally {
       setIsSubmitting(false);
     }
@@ -68,9 +71,7 @@ export default function RegisterPage() {
       setIsSubmitting(true);
       await loginWithGoogle();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al registrarse con Google"
-      );
+      setError(getFriendlyErrorMessage(err));
       setIsSubmitting(false);
     }
   }
@@ -90,7 +91,10 @@ export default function RegisterPage() {
 
         {/* Error Message */}
         {(error || authError) && (
-          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg text-sm">
+          <div
+            className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg text-sm"
+            role="alert"
+          >
             {error || authError}
           </div>
         )}
@@ -98,46 +102,64 @@ export default function RegisterPage() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            >
               Nombre completo
             </label>
             <input
+              id="name"
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               placeholder="Tu nombre"
-              disabled={isSubmitting}
+              disabled={isSubmitting || loading}
+              required
+              aria-required="true"
               className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            >
               Email
             </label>
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="tu@email.com"
-              disabled={isSubmitting}
+              disabled={isSubmitting || loading}
+              required
+              aria-required="true"
               className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            >
               Contraseña
             </label>
             <input
+              id="password"
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               placeholder="••••••••"
-              disabled={isSubmitting}
+              disabled={isSubmitting || loading}
+              required
+              aria-required="true"
               className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             />
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -146,27 +168,37 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            >
               Confirmar contraseña
             </label>
             <input
+              id="confirmPassword"
               type="password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="••••••••"
-              disabled={isSubmitting}
+              disabled={isSubmitting || loading}
+              required
+              aria-required="true"
               className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             />
           </div>
 
-          <button
+          <LoadingButton
             type="submit"
-            disabled={isSubmitting || loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 rounded-lg transition duration-200 cursor-pointer disabled:cursor-not-allowed"
+            isLoading={isSubmitting || loading}
+            loadingText="Registrando..."
+            variant="primary"
+            className="w-full"
+            ariaLabel="Crear cuenta"
           >
-            {isSubmitting ? "Registrando..." : "Crear cuenta"}
-          </button>
+            <UserPlus className="w-4 h-4" />
+            Crear cuenta
+          </LoadingButton>
         </form>
 
         {/* Divider */}
@@ -177,11 +209,14 @@ export default function RegisterPage() {
         </div>
 
         {/* Google Register */}
-        <button
+        <LoadingButton
           type="button"
           onClick={handleGoogleRegister}
-          disabled={isSubmitting || loading}
-          className="w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium py-2 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+          isLoading={isSubmitting || loading}
+          loadingText="Conectando..."
+          variant="secondary"
+          className="w-full"
+          ariaLabel="Registrarse con Google"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -202,7 +237,7 @@ export default function RegisterPage() {
             />
           </svg>
           Continuar con Google
-        </button>
+        </LoadingButton>
 
         {/* Footer */}
         <p className="text-center text-sm text-slate-600 dark:text-slate-400 mt-6">

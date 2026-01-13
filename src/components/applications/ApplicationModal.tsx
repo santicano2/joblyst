@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Application, CreateApplicationInput } from "@/types/applications";
 import { formatDate } from "@/utils/dateFormatter";
 import { getAllCVs } from "@/services/storage";
+import LoadingButton from "@/components/common/LoadingButton";
+import { X } from "lucide-react";
 
 interface ApplicationModalProps {
   isOpen: boolean;
@@ -114,26 +116,42 @@ export default function ApplicationModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fadeIn">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scaleIn">
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fadeIn"
+      role="presentation"
+    >
+      <div
+        className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scaleIn"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-6 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h2
+            id="modal-title"
+            className="text-2xl font-bold text-slate-900 dark:text-white"
+          >
             {application ? "Editar postulación" : "Nueva postulación"}
           </h2>
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-2xl cursor-pointer disabled:opacity-50"
+            className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 cursor-pointer disabled:opacity-50 p-2"
+            aria-label="Cerrar diálogo"
+            aria-disabled={isLoading}
           >
-            ×
+            <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg text-sm">
+            <div
+              className="p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg text-sm"
+              role="alert"
+            >
               {error}
             </div>
           )}
@@ -141,10 +159,14 @@ export default function ApplicationModal({
           <div className="grid grid-cols-2 gap-4">
             {/* jobTitle */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              <label
+                htmlFor="jobTitle"
+                className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+              >
                 Puesto *
               </label>
               <input
+                id="jobTitle"
                 type="text"
                 value={formData.jobTitle}
                 onChange={(e) =>
@@ -152,16 +174,22 @@ export default function ApplicationModal({
                 }
                 placeholder="Desarrollador React"
                 disabled={isLoading}
+                required
+                aria-required="true"
                 className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
               />
             </div>
 
             {/* company */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              <label
+                htmlFor="company"
+                className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+              >
                 Empresa *
               </label>
               <input
+                id="company"
                 type="text"
                 value={formData.company}
                 onChange={(e) =>
@@ -169,13 +197,18 @@ export default function ApplicationModal({
                 }
                 placeholder="Google"
                 disabled={isLoading}
+                required
+                aria-required="true"
                 className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
               />
             </div>
 
             {/* location */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              <label
+                htmlFor="location"
+                className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+              >
                 Ubicación *
               </label>
               <input
@@ -458,22 +491,27 @@ export default function ApplicationModal({
 
           {/* Buttons */}
           <div className="flex gap-3 pt-4">
-            <button
+            <LoadingButton
               type="submit"
-              disabled={isLoading}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 rounded-lg transition cursor-pointer disabled:cursor-not-allowed"
+              isLoading={isLoading}
+              loadingText={application ? "Actualizando..." : "Creando..."}
+              variant="primary"
+              className="flex-1"
+              ariaLabel={
+                application
+                  ? "Guardar cambios de postulación"
+                  : "Crear nueva postulación"
+              }
             >
-              {isLoading
-                ? "Guardando..."
-                : application
-                ? "Actualizar"
-                : "Crear"}
-            </button>
+              {application ? "Actualizar" : "Crear"}
+            </LoadingButton>
             <button
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="flex-1 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-medium py-2 rounded-lg transition cursor-pointer disabled:cursor-not-allowed"
+              className="flex-1 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-medium py-2 rounded-lg transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Cancelar y cerrar formulario"
+              aria-disabled={isLoading}
             >
               Cancelar
             </button>
