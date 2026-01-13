@@ -17,7 +17,6 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { href: "/dashboard", label: "Dashboard" },
     { href: "/applications", label: "Postulaciones" },
     { href: "/analytics", label: "Analytics" },
     { href: "/cvs", label: "CVs" },
@@ -30,7 +29,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href="/applications" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-linear-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">J</span>
             </div>

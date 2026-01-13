@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CreateApplicationInput } from "@/types/applications";
+import { getFavoriteCV, CV } from "@/services/cvRepository";
 import { toast } from "sonner";
 
 interface QuickAddFormProps {
@@ -15,6 +16,8 @@ export default function QuickAddForm({
 }: QuickAddFormProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [parsingUrl, setParsingUrl] = useState(false);
+  const [favoriteCV, setFavoriteCV] = useState<CV | null>(null);
+  const [loadingFavoriteCV, setLoadingFavoriteCV] = useState(true);
   const [formData, setFormData] = useState({
     company: "",
     jobTitle: "",
@@ -22,6 +25,24 @@ export default function QuickAddForm({
     location: "",
   });
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Cargar CV favorito al montar
+    const loadFavoriteCV = async () => {
+      try {
+        const cv = await getFavoriteCV();
+        setFavoriteCV(cv);
+      } catch (err) {
+        // No bloquea si hay error de permisos
+        console.warn("No se pudo cargar CV favorito:", err);
+        setFavoriteCV(null);
+      } finally {
+        setLoadingFavoriteCV(false);
+      }
+    };
+
+    loadFavoriteCV();
+  }, []);
 
   async function handleParseLink() {
     if (!formData.link) {
@@ -81,6 +102,7 @@ export default function QuickAddForm({
         responseReceived: false,
         source: "LinkedIn",
         tags: [],
+        favoriteCvId: favoriteCV?.$id || undefined,
       });
 
       setFormData({ company: "", jobTitle: "", link: "", location: "" });
@@ -111,6 +133,12 @@ export default function QuickAddForm({
           {error && (
             <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg text-sm">
               {error}
+            </div>
+          )}
+
+          {!loadingFavoriteCV && favoriteCV && (
+            <div className="mb-4 p-3 bg-blue-100 dark:bg-blue-900/30 border border-blue-400 dark:border-blue-600 text-blue-700 dark:text-blue-300 rounded-lg text-sm">
+              ⭐ CV Favorito: <strong>{favoriteCV.fileName}</strong> será usado en esta postulación
             </div>
           )}
 

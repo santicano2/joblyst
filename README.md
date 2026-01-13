@@ -8,7 +8,7 @@
 
 - Mejorar landing
 - Mejorar dashboard
-- Mejorar CSV
+- Mejorar CSV y PDF
 
 ## 🚀 Email Notifications & Cron Jobs
 

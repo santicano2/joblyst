@@ -196,7 +196,7 @@ export default function DetailModal({
           <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* CV Section */}
-          {application.cvFileId && (
+          {(application.cvFileId || application.favoriteCvId) && (
             <>
               <div>
                 <label className="text-sm font-semibold text-slate-600 dark:text-slate-400 block mb-2">
@@ -212,17 +212,19 @@ export default function DetailModal({
                   </svg>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-slate-900 dark:text-white">
-                      CV Seleccionado
+                      {application.cvFileId ? "CV Seleccionado" : "CV Favorito"}
                     </p>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      ID: {application.cvFileId.substring(0, 8)}...
+                      ID: {(application.cvFileId || application.favoriteCvId)?.substring(0, 8)}...
                     </p>
                   </div>
                   <button
                     onClick={async () => {
                       try {
                         setIsLoadingCV(true);
-                        const url = await getDownloadURL(application.cvFileId!);
+                        const fileId = application.cvFileId || application.favoriteCvId;
+                        if (!fileId) return;
+                        const url = await getDownloadURL(fileId);
                         setCVDownloadUrl(url);
                         // Open download
                         window.open(url, "_blank");

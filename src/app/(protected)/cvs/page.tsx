@@ -1,10 +1,18 @@
 "use client";
 
 import CVUpload from "@/components/common/CVUpload";
+import CVManager from "@/components/common/CVManager";
 import { useState } from "react";
 
 export default function CVsPage() {
   const [uploadedCVId, setUploadedCVId] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleFileUploaded = (fileId: string) => {
+    setUploadedCVId(fileId);
+    // Fuerza re-render de CVManager
+    setRefreshKey(prev => prev + 1);
+  };
 
   return (
     <div>
@@ -14,7 +22,7 @@ export default function CVsPage() {
           Mis CVs
         </h1>
         <p className="text-slate-600 dark:text-slate-400 text-sm">
-          Sube tus CVs aquí y luego selecciona cuál usaste en cada postulación
+          Sube tus CVs aquí, marca uno como favorito y úsalo automáticamente en tus postulaciones
         </p>
       </div>
 
@@ -24,9 +32,14 @@ export default function CVsPage() {
           Subir Nuevo CV
         </h2>
         <CVUpload
-          onFileSelected={(fileId) => setUploadedCVId(fileId)}
+          onFileSelected={handleFileUploaded}
           existingFileId={uploadedCVId || undefined}
         />
+      </div>
+
+      {/* CV Manager Section */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-8 mb-8 animate-slideInUp">
+        <CVManager key={refreshKey} />
       </div>
 
       {/* Info Section */}
@@ -36,12 +49,13 @@ export default function CVsPage() {
         </h3>
         <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-300">
           <li>
-            ✅ Sube aquí todos tus CVs (versiones diferentes, idiomas, etc.)
+            ✅ Sube todos tus CVs (versiones diferentes, idiomas, etc.)
           </li>
-          <li>✅ Luego en cada postulación, selecciona qué CV enviaste</li>
+          <li>⭐ Marca uno como favorito</li>
           <li>
-            ✅ Descarga desde el detalle de la postulación si lo necesitas
+            ✅ El CV favorito se seleccionará automáticamente en nuevas postulaciones
           </li>
+          <li>✅ Puedes descargar tus CVs desde esta página</li>
           <li>✅ Máximo 10MB por archivo (PDF o DOC)</li>
         </ul>
       </div>

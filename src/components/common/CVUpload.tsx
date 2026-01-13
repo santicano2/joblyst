@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { uploadCV, deleteCV } from "@/services/storage";
+import { createCVReference } from "@/services/cvRepository";
 import { showSuccessToast, showErrorToast } from "@/utils/toast";
 
 interface CVUploadProps {
@@ -24,7 +25,12 @@ export default function CVUpload({
 
     try {
       setIsLoading(true);
+      // Subir archivo a Storage
       const fileId = await uploadCV(file, file.name);
+      
+      // Crear referencia en BD
+      await createCVReference(fileId, file.name);
+      
       setFileName(file.name);
       onFileSelected?.(fileId);
       showSuccessToast("CV subido exitosamente ✨");

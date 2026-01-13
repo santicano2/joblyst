@@ -24,17 +24,25 @@ export async function createApplication(
       throw new Error("No se pudo obtener el email del usuario");
     }
 
+    // Construir objeto de documento sin campos undefined
+    const documentData: Record<string, any> = {
+      userId,
+      userEmail: currentUser.email,
+      ...data,
+      responseReceived: data.responseReceived ?? false,
+      tags: data.tags ?? [],
+    };
+
+    // Remover campos undefined para evitar errores de atributos desconocidos
+    Object.keys(documentData).forEach(
+      (key) => documentData[key] === undefined && delete documentData[key]
+    );
+
     const response = await databases.createDocument(
       APPWRITE_CONSTANTS.databaseId,
       APPWRITE_CONSTANTS.applicationCollectionId,
       "unique()",
-      {
-        userId,
-        userEmail: currentUser.email,
-        ...data,
-        responseReceived: data.responseReceived ?? false,
-        tags: data.tags ?? [],
-      }
+      documentData
     );
 
     return response as unknown as Application;
