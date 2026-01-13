@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { CreateApplicationInput } from "@/types/applications";
 import { getFavoriteCV, CV } from "@/services/cvRepository";
 import { toast } from "sonner";
+import { Link as LinkIcon, Zap } from "lucide-react";
 
 interface QuickAddFormProps {
   onSubmit: (data: CreateApplicationInput) => Promise<void>;
@@ -117,9 +118,10 @@ export default function QuickAddForm({
       {!isExpanded ? (
         <button
           onClick={() => setIsExpanded(true)}
-          className="w-full px-6 py-4 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition shadow-lg cursor-pointer"
+          className="w-full px-6 py-4 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition shadow-lg cursor-pointer flex items-center justify-center gap-2"
         >
-          ⚡ Agregar postulación rápidamente
+          <Zap className="w-5 h-5" />
+          Agregar postulación rápidamente
         </button>
       ) : (
         <form
@@ -138,7 +140,8 @@ export default function QuickAddForm({
 
           {!loadingFavoriteCV && favoriteCV && (
             <div className="mb-4 p-3 bg-blue-100 dark:bg-blue-900/30 border border-blue-400 dark:border-blue-600 text-blue-700 dark:text-blue-300 rounded-lg text-sm">
-              ⭐ CV Favorito: <strong>{favoriteCV.fileName}</strong> será usado en esta postulación
+              ⭐ CV Favorito: <strong>{favoriteCV.fileName}</strong> será usado
+              en esta postulación
             </div>
           )}
 
@@ -196,10 +199,10 @@ export default function QuickAddForm({
                 type="button"
                 onClick={handleParseLink}
                 disabled={isLoading || parsingUrl || !formData.link}
-                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition cursor-pointer disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition cursor-pointer disabled:cursor-not-allowed flex items-center gap-2"
                 title="Extrae datos automáticamente del link"
               >
-                {parsingUrl ? "🔄" : "🔗"}
+                {parsingUrl ? "🔄" : <LinkIcon className="w-4 h-4" />}
               </button>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">

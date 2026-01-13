@@ -4,6 +4,7 @@ import { useState } from "react";
 import { uploadCV, deleteCV } from "@/services/storage";
 import { createCVReference } from "@/services/cvRepository";
 import { showSuccessToast, showErrorToast } from "@/utils/toast";
+import { Upload, Trash2 } from "lucide-react";
 
 interface CVUploadProps {
   onFileSelected?: (fileId: string) => void;
@@ -27,10 +28,10 @@ export default function CVUpload({
       setIsLoading(true);
       // Subir archivo a Storage
       const fileId = await uploadCV(file, file.name);
-      
+
       // Crear referencia en BD
       await createCVReference(fileId, file.name);
-      
+
       setFileName(file.name);
       onFileSelected?.(fileId);
       showSuccessToast("CV subido exitosamente ✨");
@@ -76,7 +77,8 @@ export default function CVUpload({
             disabled={isLoading}
             className="hidden"
           />
-          <div className="w-full px-4 py-3 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/30 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition text-center">
+          <div className="w-full px-4 py-3 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/30 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition text-center flex flex-col items-center gap-2">
+            <Upload className="w-5 h-5 text-slate-600 dark:text-slate-400" />
             <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
               {isLoading ? "Subiendo..." : "Haz clic para subir CV"}
             </p>
@@ -87,8 +89,9 @@ export default function CVUpload({
           <button
             onClick={handleDelete}
             disabled={isLoading}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-lg transition cursor-pointer font-medium text-sm"
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-lg transition cursor-pointer font-medium text-sm flex items-center gap-2"
           >
+            <Trash2 className="w-4 h-4" />
             Eliminar
           </button>
         )}

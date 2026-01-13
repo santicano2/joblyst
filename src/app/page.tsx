@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@/context/authContext";
+import { Clipboard, BarChart3, Lock } from "lucide-react";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -70,8 +71,10 @@ export default function Home() {
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-8 w-full my-16">
-          <div className="p-6 bg-white dark:bg-slate-800 rounded-lg shadow-lg hover:shadow-xl transition">
-            <div className="text-4xl mb-4">📋</div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-lg shadow-lg hover:shadow-xl transition text-center">
+            <div className="flex justify-center mb-4 text-blue-600 dark:text-blue-400">
+              <Clipboard className="w-10 h-10" />
+            </div>
             <h3 className="text-xl font-bold mb-2">Gestión Simple</h3>
             <p className="text-slate-600 dark:text-slate-400">
               Registra postulaciones con todos los detalles en un lugar
@@ -79,8 +82,10 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="p-6 bg-white dark:bg-slate-800 rounded-lg shadow-lg hover:shadow-xl transition">
-            <div className="text-4xl mb-4">📊</div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-lg shadow-lg hover:shadow-xl transition text-center">
+            <div className="flex justify-center mb-4 text-blue-600 dark:text-blue-400">
+              <BarChart3 className="w-10 h-10" />
+            </div>
             <h3 className="text-xl font-bold mb-2">Estadísticas</h3>
             <p className="text-slate-600 dark:text-slate-400">
               Visualiza gráficos de tus postulaciones y analiza patrones de
@@ -88,8 +93,10 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="p-6 bg-white dark:bg-slate-800 rounded-lg shadow-lg hover:shadow-xl transition">
-            <div className="text-4xl mb-4">🔒</div>
+          <div className="p-6 bg-white dark:bg-slate-800 rounded-lg shadow-lg hover:shadow-xl transition text-center">
+            <div className="flex justify-center mb-4 text-blue-600 dark:text-blue-400">
+              <Lock className="w-10 h-10" />
+            </div>
             <h3 className="text-xl font-bold mb-2">Seguro</h3>
             <p className="text-slate-600 dark:text-slate-400">
               Tus datos están protegidos con autenticación segura y
@@ -100,7 +107,7 @@ export default function Home() {
 
         {/* CTA Button */}
         <Link
-          href={user ? "/dashboard" : "/register"}
+          href={user ? "/applications" : "/register"}
           className="px-8 py-4 text-lg rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition shadow-lg hover:shadow-xl"
         >
           {user ? "Ir a mis postulaciones →" : "Comenzar ahora →"}

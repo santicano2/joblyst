@@ -4,6 +4,7 @@ import { Application } from "@/types/applications";
 import { formatDate, formatDateTime } from "@/utils/dateFormatter";
 import { getDownloadURL } from "@/services/storage";
 import { useState } from "react";
+import { X, Download, FileText, Star } from "lucide-react";
 
 interface DetailModalProps {
   isOpen: boolean;
@@ -76,28 +77,20 @@ export default function DetailModal({
                     ? "Remover de favoritos"
                     : "Agregar a favoritos"
                 }
-                className="text-white hover:bg-white/20 rounded-lg p-2 transition cursor-pointer text-2xl"
+                className="text-white hover:bg-white/20 rounded-lg p-2 transition cursor-pointer"
               >
-                {application.isFavorite ? "★" : "☆"}
+                {application.isFavorite ? (
+                  <Star className="w-6 h-6 fill-current" />
+                ) : (
+                  <Star className="w-6 h-6" />
+                )}
               </button>
             )}
             <button
               onClick={onClose}
               className="text-white hover:bg-white/20 rounded-lg p-2 transition cursor-pointer"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <X className="w-6 h-6" />
             </button>
           </div>
         </div>
@@ -203,26 +196,25 @@ export default function DetailModal({
                   📄 CV Enviado
                 </label>
                 <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
-                  <svg
-                    className="w-5 h-5 text-red-600 shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
-                  </svg>
+                  <FileText className="w-5 h-5 text-red-600 shrink-0" />
                   <div className="flex-1">
                     <p className="text-sm font-medium text-slate-900 dark:text-white">
                       {application.cvFileId ? "CV Seleccionado" : "CV Favorito"}
                     </p>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      ID: {(application.cvFileId || application.favoriteCvId)?.substring(0, 8)}...
+                      ID:{" "}
+                      {(
+                        application.cvFileId || application.favoriteCvId
+                      )?.substring(0, 8)}
+                      ...
                     </p>
                   </div>
                   <button
                     onClick={async () => {
                       try {
                         setIsLoadingCV(true);
-                        const fileId = application.cvFileId || application.favoriteCvId;
+                        const fileId =
+                          application.cvFileId || application.favoriteCvId;
                         if (!fileId) return;
                         const url = await getDownloadURL(fileId);
                         setCVDownloadUrl(url);
@@ -235,9 +227,10 @@ export default function DetailModal({
                       }
                     }}
                     disabled={isLoadingCV}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg transition cursor-pointer font-medium text-sm"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg transition cursor-pointer font-medium text-sm flex items-center gap-2"
                   >
-                    {isLoadingCV ? "..." : "Descargar"}
+                    {isLoadingCV ? "..." : <Download className="w-4 h-4" />}
+                    Descargar
                   </button>
                 </div>
               </div>

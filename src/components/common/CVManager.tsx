@@ -9,6 +9,7 @@ import {
 } from "@/services/cvRepository";
 import { getDownloadURL } from "@/services/storage";
 import { showSuccessToast, showErrorToast } from "@/utils/toast";
+import { Star, Download, Trash2, FileText } from "lucide-react";
 
 export default function CVManager() {
   const [cvs, setCVs] = useState<CV[]>([]);
@@ -127,7 +128,7 @@ export default function CVManager() {
               {/* Información del CV */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">📄</span>
+                  <FileText className="w-5 h-5 text-blue-600 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-slate-900 dark:text-white truncate">
                       {cv.fileName}
@@ -145,7 +146,7 @@ export default function CVManager() {
                 <button
                   onClick={() => handleSetFavorite(cv.$id)}
                   disabled={isUpdating !== null}
-                  className={`px-3 py-2 rounded-lg transition font-medium text-sm ${
+                  className={`px-3 py-2 rounded-lg transition font-medium text-sm flex items-center gap-1 ${
                     cv.isFavorite
                       ? "bg-blue-500 hover:bg-blue-600 text-white"
                       : "bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300"
@@ -154,27 +155,37 @@ export default function CVManager() {
                     cv.isFavorite ? "Es el favorito" : "Marcar como favorito"
                   }
                 >
-                  {cv.isFavorite ? "⭐ Favorito" : "☆ Favorito"}
+                  {cv.isFavorite ? (
+                    <>
+                      <Star className="w-4 h-4 fill-current" />
+                      Favorito
+                    </>
+                  ) : (
+                    <>
+                      <Star className="w-4 h-4" />
+                      Favorito
+                    </>
+                  )}
                 </button>
 
                 {/* Botón Descargar */}
                 <button
                   onClick={() => handleDownload(cv.fileId, cv.fileName)}
                   disabled={isUpdating !== null}
-                  className="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 transition font-medium text-sm disabled:opacity-50 cursor-pointer"
+                  className="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 transition font-medium text-sm disabled:opacity-50 cursor-pointer flex items-center gap-1"
                   title="Descargar CV"
                 >
-                  ⬇️
+                  <Download className="w-4 h-4" />
                 </button>
 
                 {/* Botón Eliminar */}
                 <button
                   onClick={() => handleDelete(cv.$id, cv.fileId)}
                   disabled={isUpdating !== null}
-                  className="px-3 py-2 rounded-lg bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400 transition font-medium text-sm disabled:opacity-50 cursor-pointer"
+                  className="px-3 py-2 rounded-lg bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400 transition font-medium text-sm disabled:opacity-50 cursor-pointer flex items-center gap-1"
                   title="Eliminar CV"
                 >
-                  🗑️
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             </div>

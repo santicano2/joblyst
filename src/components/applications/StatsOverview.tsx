@@ -2,11 +2,21 @@
 
 import { Application } from "@/types/applications";
 import { isInterviewSoon } from "@/utils/interviewUtils";
+import {
+  Clipboard,
+  CheckCircle,
+  User,
+  Bell,
+  Star,
+  Gift,
+  XCircle,
+  TrendingUp,
+} from "lucide-react";
 
 interface StatsCardProps {
   title: string;
   value: number | string;
-  icon: string;
+  icon: React.ReactNode;
   color: "blue" | "green" | "yellow" | "red";
 }
 
@@ -35,7 +45,7 @@ function StatsCard({ title, value, icon, color }: StatsCardProps) {
           <p className="text-sm font-medium opacity-75">{title}</p>
           <p className="text-3xl font-bold mt-2">{value}</p>
         </div>
-        <div className="text-4xl">{icon}</div>
+        <div className="text-blue-600 dark:text-blue-400">{icon}</div>
       </div>
     </div>
   );
@@ -70,34 +80,49 @@ export default function StatsOverview({ applications }: StatsOverviewProps) {
       <StatsCard
         title="Total de postulaciones"
         value={total}
-        icon="📋"
+        icon={<Clipboard className="w-8 h-8" />}
         color="blue"
       />
-      <StatsCard title="Aplicadas" value={applied} icon="✅" color="blue" />
+      <StatsCard
+        title="Aplicadas"
+        value={applied}
+        icon={<CheckCircle className="w-8 h-8" />}
+        color="blue"
+      />
       <StatsCard
         title="En entrevista"
         value={interviews}
-        icon="👤"
+        icon={<User className="w-8 h-8" />}
         color="yellow"
       />
       <StatsCard
         title="Próximas entrevistas"
         value={upcomingInterviews}
-        icon="🔔"
+        icon={<Bell className="w-8 h-8" />}
         color={upcomingInterviews > 0 ? "red" : "blue"}
       />
       <StatsCard
         title="Favoritos"
         value={favorites}
-        icon="⭐"
+        icon={<Star className="w-8 h-8" fill="currentColor" />}
         color={favorites > 0 ? "yellow" : "blue"}
       />
-      <StatsCard title="Ofertas" value={offers} icon="🎉" color="green" />
-      <StatsCard title="Rechazadas" value={rejected} icon="❌" color="red" />
+      <StatsCard
+        title="Ofertas"
+        value={offers}
+        icon={<Gift className="w-8 h-8" />}
+        color="green"
+      />
+      <StatsCard
+        title="Rechazadas"
+        value={rejected}
+        icon={<XCircle className="w-8 h-8" />}
+        color="red"
+      />
       <StatsCard
         title="Tasa de respuesta"
         value={`${responseRate}%`}
-        icon="📊"
+        icon={<TrendingUp className="w-8 h-8" />}
         color="green"
       />
     </div>
