@@ -9,6 +9,7 @@ interface ApplicationsTableProps {
   onEdit: (app: Application) => void;
   onDelete: (app: Application) => void;
   onView: (app: Application) => void;
+  onToggleFavorite: (app: Application) => void;
   isLoading: boolean;
 }
 
@@ -32,6 +33,7 @@ export default function ApplicationsTable({
   onEdit,
   onDelete,
   onView,
+  onToggleFavorite,
   isLoading,
 }: ApplicationsTableProps) {
   if (applications.length === 0) {
@@ -116,6 +118,18 @@ export default function ApplicationsTable({
               </td>
               <td className="px-6 py-4 text-right">
                 <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => onToggleFavorite(app)}
+                    disabled={isLoading}
+                    title={
+                      app.isFavorite
+                        ? "Remover de favoritos"
+                        : "Agregar a favoritos"
+                    }
+                    className="px-3 py-1 text-sm bg-amber-600 hover:bg-amber-700 disabled:bg-amber-400 text-white rounded transition cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    {app.isFavorite ? "★" : "☆"}
+                  </button>
                   <button
                     onClick={() => onView(app)}
                     disabled={isLoading}

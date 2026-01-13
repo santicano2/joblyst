@@ -63,6 +63,8 @@ export default function StatsOverview({ applications }: StatsOverviewProps) {
     isInterviewSoon(a.interviewDate)
   ).length;
 
+  const favorites = applications.filter((a) => a.isFavorite).length;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <StatsCard
@@ -83,6 +85,12 @@ export default function StatsOverview({ applications }: StatsOverviewProps) {
         value={upcomingInterviews}
         icon="🔔"
         color={upcomingInterviews > 0 ? "red" : "blue"}
+      />
+      <StatsCard
+        title="Favoritos"
+        value={favorites}
+        icon="⭐"
+        color={favorites > 0 ? "yellow" : "blue"}
       />
       <StatsCard title="Ofertas" value={offers} icon="🎉" color="green" />
       <StatsCard title="Rechazadas" value={rejected} icon="❌" color="red" />

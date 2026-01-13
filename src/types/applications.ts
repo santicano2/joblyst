@@ -32,6 +32,7 @@ export interface Application {
   tags: string[];
   link?: string;
   cvFileId?: string;
+  isFavorite?: boolean;
   $createdAt: string;
   $updatedAt: string;
 }
@@ -53,6 +54,7 @@ export interface CreateApplicationInput {
   tags?: string[];
   link?: string;
   cvFileId?: string;
+  isFavorite?: boolean;
 }
 
 export interface UpdateApplicationInput

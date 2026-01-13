@@ -140,3 +140,25 @@ export async function getApplicationsByStatus(
     );
   }
 }
+
+export async function toggleFavorite(
+  applicationId: string,
+  isFavorite: boolean
+): Promise<Application> {
+  try {
+    const response = await databases.updateDocument(
+      APPWRITE_CONSTANTS.databaseId,
+      APPWRITE_CONSTANTS.applicationCollectionId,
+      applicationId,
+      { isFavorite }
+    );
+
+    return response as unknown as Application;
+  } catch (error) {
+    throw new Error(
+      `Error al actualizar favorito: ${
+        error instanceof Error ? error.message : error
+      }`
+    );
+  }
+}

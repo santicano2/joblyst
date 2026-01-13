@@ -9,12 +9,14 @@ interface DetailModalProps {
   isOpen: boolean;
   application: Application | null;
   onClose: () => void;
+  onToggleFavorite?: (app: Application) => void;
 }
 
 export default function DetailModal({
   isOpen,
   application,
   onClose,
+  onToggleFavorite,
 }: DetailModalProps) {
   const [cvDownloadUrl, setCVDownloadUrl] = useState<string | null>(null);
   const [isLoadingCV, setIsLoadingCV] = useState(false);
@@ -65,24 +67,39 @@ export default function DetailModal({
             </h2>
             <p className="text-blue-100">{application.company}</p>
           </div>
-          <button
-            onClick={onClose}
-            className="text-white hover:bg-white/20 rounded-lg p-2 transition cursor-pointer"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div className="flex items-center gap-2">
+            {onToggleFavorite && (
+              <button
+                onClick={() => onToggleFavorite(application)}
+                title={
+                  application.isFavorite
+                    ? "Remover de favoritos"
+                    : "Agregar a favoritos"
+                }
+                className="text-white hover:bg-white/20 rounded-lg p-2 transition cursor-pointer text-2xl"
+              >
+                {application.isFavorite ? "★" : "☆"}
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="text-white hover:bg-white/20 rounded-lg p-2 transition cursor-pointer"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Content */}

@@ -15,6 +15,7 @@ export interface FilterValues {
   location: string;
   salaryMin: number | null;
   salaryMax: number | null;
+  onlyFavorites?: boolean;
 }
 
 export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
@@ -27,11 +28,12 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
     location: "",
     salaryMin: null,
     salaryMax: null,
+    onlyFavorites: false,
   });
 
   const handleFilterChange = (
     key: keyof FilterValues,
-    value: string | number | null
+    value: string | number | null | boolean
   ) => {
     const updatedFilters = {
       ...filters,
@@ -50,6 +52,7 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
       location: "",
       salaryMin: null,
       salaryMax: null,
+      onlyFavorites: false,
     };
     setFilters(emptyFilters);
     onFilterChange(emptyFilters);
@@ -227,6 +230,23 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
                 }
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+            </div>
+
+            {/* Favorites Only */}
+            <div className="flex items-end">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={filters.onlyFavorites || false}
+                  onChange={(e) =>
+                    handleFilterChange("onlyFavorites", e.target.checked)
+                  }
+                  className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 accent-amber-500 cursor-pointer"
+                />
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  ⭐ Solo favoritos
+                </span>
+              </label>
             </div>
           </div>
 

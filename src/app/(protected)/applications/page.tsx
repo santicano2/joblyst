@@ -8,6 +8,7 @@ import {
   createApplication,
   updateApplication,
   deleteApplication,
+  toggleFavorite,
 } from "@/services/applications";
 import ApplicationsTable from "@/components/applications/ApplicationsTable";
 import ApplicationModal from "@/components/applications/ApplicationModal";
@@ -59,6 +60,7 @@ export default function ApplicationsPage() {
     location: "",
     salaryMin: null,
     salaryMax: null,
+    onlyFavorites: false,
   });
 
   // Filtrar postulaciones por mes y filtros avanzados
@@ -116,6 +118,11 @@ export default function ApplicationsPage() {
       if (app.salaryMin > advancedFilters.salaryMax) {
         return false;
       }
+    }
+
+    // Favorites filter
+    if (advancedFilters.onlyFavorites && !app.isFavorite) {
+      return false;
     }
 
     return true;
@@ -240,6 +247,20 @@ export default function ApplicationsPage() {
     setIsDetailModalOpen(true);
   }
 
+  async function handleToggleFavorite(app: Application) {
+    try {
+      const updated = await toggleFavorite(app.$id, !app.isFavorite);
+      setApplications((prev) =>
+        prev.map((a) => (a.$id === updated.$id ? updated : a))
+      );
+      showSuccessToast(
+        updated.isFavorite ? "⭐ Agregado a favoritos" : "Removido de favoritos"
+      );
+    } catch (err) {
+      showErrorToast("Error al actualizar favorito");
+    }
+  }
+
   return (
     <div>
       {/* Header */}
@@ -312,6 +333,7 @@ export default function ApplicationsPage() {
             onEdit={openEditModal}
             onDelete={openDeleteModal}
             onView={openDetailModal}
+            onToggleFavorite={handleToggleFavorite}
             isLoading={isSaving}
           />
         </div>
@@ -359,6 +381,7 @@ export default function ApplicationsPage() {
           setIsDetailModalOpen(false);
           setSelectedDetail(null);
         }}
+        onToggleFavorite={handleToggleFavorite}
       />
     </div>
   );
