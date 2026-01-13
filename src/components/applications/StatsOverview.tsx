@@ -21,22 +21,29 @@ interface StatsCardProps {
 }
 
 const colorClasses = {
-  blue: "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300",
-  green: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300",
+  blue: "bg-blue-50 dark:bg-blue-950/30 text-blue-800 dark:text-blue-200",
+  green: "bg-green-50 dark:bg-green-950/30 text-green-800 dark:text-green-200",
   yellow:
-    "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300",
-  red: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300",
+    "bg-yellow-50 dark:bg-yellow-950/30 text-yellow-800 dark:text-yellow-200",
+  red: "bg-red-50 dark:bg-red-950/30 text-red-800 dark:text-red-200",
 };
 
 function StatsCard({ title, value, icon, color }: StatsCardProps) {
+  const iconColors = {
+    blue: "text-blue-600 dark:text-blue-400",
+    green: "text-green-600 dark:text-green-400",
+    yellow: "text-yellow-600 dark:text-yellow-400",
+    red: "text-red-600 dark:text-red-400",
+  };
+
   return (
     <div
       className={`p-6 rounded-lg ${colorClasses[color]} border-2 ${
         {
-          blue: "border-blue-200 dark:border-blue-700",
-          green: "border-green-200 dark:border-green-700",
-          yellow: "border-yellow-200 dark:border-yellow-700",
-          red: "border-red-200 dark:border-red-700",
+          blue: "border-blue-300 dark:border-blue-700",
+          green: "border-green-300 dark:border-green-700",
+          yellow: "border-yellow-300 dark:border-yellow-700",
+          red: "border-red-300 dark:border-red-700",
         }[color]
       }`}
     >
@@ -45,7 +52,7 @@ function StatsCard({ title, value, icon, color }: StatsCardProps) {
           <p className="text-sm font-medium opacity-75">{title}</p>
           <p className="text-3xl font-bold mt-2">{value}</p>
         </div>
-        <div className="text-blue-600 dark:text-blue-400">{icon}</div>
+        <div className={iconColors[color]}>{icon}</div>
       </div>
     </div>
   );

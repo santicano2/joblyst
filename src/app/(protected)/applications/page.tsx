@@ -370,18 +370,6 @@ export default function ApplicationsPage() {
         </div>
       )}
 
-      {/* Link to Analytics */}
-      {!isLoading && filteredApplications.length > 0 && (
-        <div className="mt-12 text-center">
-          <Link
-            href="/analytics"
-            className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-lg transition cursor-pointer"
-          >
-            📊 Ver Analytics Detallados
-          </Link>
-        </div>
-      )}
-
       {/* Modals */}
       <ApplicationModal
         isOpen={isModalOpen}

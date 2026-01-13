@@ -14,11 +14,14 @@ interface ApplicationsTableProps {
 }
 
 const statusColors = {
-  applied: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+  applied:
+    "bg-blue-50 text-blue-800 dark:bg-blue-950/30 dark:text-blue-200 font-semibold border border-blue-300 dark:border-blue-700",
   interview:
-    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
-  rejected: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-  offer: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+    "bg-yellow-50 text-yellow-800 dark:bg-yellow-950/30 dark:text-yellow-200 font-semibold border border-yellow-300 dark:border-yellow-700",
+  rejected:
+    "bg-red-50 text-red-800 dark:bg-red-950/30 dark:text-red-200 font-semibold border border-red-300 dark:border-red-700",
+  offer:
+    "bg-green-50 text-green-800 dark:bg-green-950/30 dark:text-green-200 font-semibold border border-green-300 dark:border-green-700",
 };
 
 const statusLabels = {
@@ -38,8 +41,8 @@ export default function ApplicationsTable({
 }: ApplicationsTableProps) {
   if (applications.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-8 text-center">
-        <p className="text-slate-600 dark:text-slate-400">
+      <div className="bg-alabaster-grey-900 dark:bg-prussian-blue-500 rounded-lg shadow p-8 text-center">
+        <p className="text-dusty-denim-500 dark:text-dusty-denim-600">
           No hay postulaciones aún. ¡Crea la primera!
         </p>
       </div>
@@ -50,23 +53,23 @@ export default function ApplicationsTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-white">
+          <tr className="border-b border-dusty-denim-300 dark:border-dusk-blue-600 bg-alabaster-grey-900 dark:bg-prussian-blue-600">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-ink-black-500 dark:text-alabaster-grey-900">
               Empresa
             </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-white">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-ink-black-500 dark:text-alabaster-grey-900">
               Puesto
             </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-white">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-ink-black-500 dark:text-alabaster-grey-900">
               Ubicación
             </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-white">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-ink-black-500 dark:text-alabaster-grey-900">
               Estado
             </th>
-            <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-white">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-ink-black-500 dark:text-alabaster-grey-900">
               Fecha
             </th>
-            <th className="px-6 py-3 text-right text-sm font-semibold text-slate-900 dark:text-white">
+            <th className="px-6 py-3 text-right text-sm font-semibold text-ink-black-500 dark:text-alabaster-grey-900">
               Acciones
             </th>
           </tr>
@@ -75,15 +78,15 @@ export default function ApplicationsTable({
           {applications.map((app) => (
             <tr
               key={app.$id}
-              className="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition"
+              className="border-b border-dusty-denim-300 dark:border-dusk-blue-600 hover:bg-alabaster-grey-900 dark:hover:bg-prussian-blue-600/30 transition"
             >
-              <td className="px-6 py-4 text-sm text-slate-900 dark:text-white font-medium">
+              <td className="px-6 py-4 text-sm text-ink-black-500 dark:text-alabaster-grey-500 font-medium">
                 {app.company}
               </td>
-              <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">
+              <td className="px-6 py-4 text-sm text-dusk-blue-500 dark:text-dusty-denim-600">
                 {app.jobTitle}
               </td>
-              <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">
+              <td className="px-6 py-4 text-sm text-dusk-blue-500 dark:text-dusty-denim-600">
                 {app.location}
               </td>
               <td className="px-6 py-4">
@@ -113,7 +116,7 @@ export default function ApplicationsTable({
                   )}
                 </div>
               </td>
-              <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">
+              <td className="px-6 py-4 text-sm text-dusk-blue-500 dark:text-dusty-denim-600">
                 {formatDate(app.dateApplied)}
               </td>
               <td className="px-6 py-4 text-right">
@@ -126,28 +129,28 @@ export default function ApplicationsTable({
                         ? "Remover de favoritos"
                         : "Agregar a favoritos"
                     }
-                    className="px-3 py-1 text-sm bg-amber-600 hover:bg-amber-700 disabled:bg-amber-400 text-white rounded transition cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-1 text-sm bg-dusty-denim-600 hover:bg-dusty-denim-700 disabled:bg-dusty-denim-400 text-alabaster-grey-900 rounded transition cursor-pointer disabled:cursor-not-allowed"
                   >
                     {app.isFavorite ? "★" : "☆"}
                   </button>
                   <button
                     onClick={() => onView(app)}
                     disabled={isLoading}
-                    className="px-3 py-1 text-sm bg-slate-600 hover:bg-slate-700 disabled:bg-slate-400 text-white rounded transition cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-1 text-sm bg-dusk-blue-600 hover:bg-dusk-blue-700 disabled:bg-dusk-blue-400 text-alabaster-grey-900 rounded transition cursor-pointer disabled:cursor-not-allowed"
                   >
                     Ver
                   </button>
                   <button
                     onClick={() => onEdit(app)}
                     disabled={isLoading}
-                    className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded transition cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-1 text-sm bg-prussian-blue-600 hover:bg-prussian-blue-700 disabled:bg-prussian-blue-400 text-alabaster-grey-900 rounded transition cursor-pointer disabled:cursor-not-allowed"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => onDelete(app)}
                     disabled={isLoading}
-                    className="px-3 py-1 text-sm bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded transition cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-1 text-sm bg-dusk-blue-500 hover:bg-dusk-blue-600 disabled:bg-dusk-blue-300 text-alabaster-grey-900 rounded transition cursor-pointer disabled:cursor-not-allowed"
                   >
                     Eliminar
                   </button>

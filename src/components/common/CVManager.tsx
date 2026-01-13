@@ -120,20 +120,20 @@ export default function CVManager() {
             key={cv.$id}
             className={`p-4 rounded-lg border-2 transition ${
               cv.isFavorite
-                ? "bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-800"
-                : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+                ? "bg-prussian-blue-50 dark:bg-prussian-blue-900/20 border-prussian-blue-300 dark:border-prussian-blue-800"
+                : "bg-alabaster-grey-900 dark:bg-prussian-blue-500 border-dusty-denim-300 dark:border-dusk-blue-600"
             }`}
           >
             <div className="flex items-center justify-between gap-3">
               {/* Información del CV */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-blue-600 shrink-0" />
+                  <FileText className="w-5 h-5 text-prussian-blue-600 dark:text-dusk-blue-400 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-slate-900 dark:text-white truncate">
+                    <p className="font-medium text-ink-black-500 dark:text-alabaster-grey-500 truncate">
                       {cv.fileName}
                     </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    <p className="text-xs text-dusk-blue-500 dark:text-dusty-denim-600 mt-1">
                       {new Date(cv.$createdAt).toLocaleDateString("es-AR")}
                     </p>
                   </div>
@@ -148,8 +148,8 @@ export default function CVManager() {
                   disabled={isUpdating !== null}
                   className={`px-3 py-2 rounded-lg transition font-medium text-sm flex items-center gap-1 ${
                     cv.isFavorite
-                      ? "bg-blue-500 hover:bg-blue-600 text-white"
-                      : "bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300"
+                      ? "bg-dusty-denim-600 hover:bg-dusty-denim-700 text-alabaster-grey-900"
+                      : "bg-dusty-denim-200 dark:bg-dusty-denim-700 hover:bg-dusty-denim-300 dark:hover:bg-dusty-denim-600 text-dusty-denim-800 dark:text-dusty-denim-200"
                   } disabled:opacity-50 cursor-pointer`}
                   title={
                     cv.isFavorite ? "Es el favorito" : "Marcar como favorito"
@@ -172,7 +172,7 @@ export default function CVManager() {
                 <button
                   onClick={() => handleDownload(cv.fileId, cv.fileName)}
                   disabled={isUpdating !== null}
-                  className="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 transition font-medium text-sm disabled:opacity-50 cursor-pointer flex items-center gap-1"
+                  className="px-3 py-2 rounded-lg bg-prussian-blue-200 dark:bg-prussian-blue-700 hover:bg-prussian-blue-300 dark:hover:bg-prussian-blue-600 text-prussian-blue-800 dark:text-prussian-blue-200 transition font-medium text-sm disabled:opacity-50 cursor-pointer flex items-center gap-1"
                   title="Descargar CV"
                 >
                   <Download className="w-4 h-4" />
@@ -182,7 +182,7 @@ export default function CVManager() {
                 <button
                   onClick={() => handleDelete(cv.$id, cv.fileId)}
                   disabled={isUpdating !== null}
-                  className="px-3 py-2 rounded-lg bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400 transition font-medium text-sm disabled:opacity-50 cursor-pointer flex items-center gap-1"
+                  className="px-3 py-2 rounded-lg bg-dusk-blue-200 dark:bg-dusk-blue-800 hover:bg-dusk-blue-300 dark:hover:bg-dusk-blue-700 text-dusk-blue-800 dark:text-dusk-blue-200 transition font-medium text-sm disabled:opacity-50 cursor-pointer flex items-center gap-1"
                   title="Eliminar CV"
                 >
                   <Trash2 className="w-4 h-4" />
