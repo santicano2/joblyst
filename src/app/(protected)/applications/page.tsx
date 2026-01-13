@@ -32,6 +32,7 @@ import {
   TableSkeleton,
   StatsOverviewSkeleton,
 } from "@/components/common/Skeleton";
+import EmptyState from "@/components/common/EmptyState";
 import { isInterviewToday } from "@/utils/interviewUtils";
 import Link from "next/link";
 
@@ -325,6 +326,17 @@ export default function ApplicationsPage() {
       {/* Loading State */}
       {isLoading ? (
         <TableSkeleton />
+      ) : filteredApplications.length === 0 ? (
+        <EmptyState
+          title="Sin postulaciones"
+          description={
+            applications.length === 0
+              ? "Comienza a registrar tus postulaciones de empleo para organizarte mejor."
+              : "No hay postulaciones que coincidan con tus filtros. Intenta ajustar los criterios de búsqueda."
+          }
+          actionLabel={applications.length === 0 ? "+ Nueva postulación" : undefined}
+          onAction={applications.length === 0 ? openCreateModal : undefined}
+        />
       ) : (
         /* Applications Table */
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden">
