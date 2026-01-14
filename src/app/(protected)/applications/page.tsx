@@ -13,9 +13,9 @@ import {
 } from "@/services/applications";
 import ApplicationsTable from "@/components/applications/ApplicationsTable";
 import MonthSelector from "@/components/applications/MonthSelector";
-import QuickAddForm from "@/components/applications/QuickAddForm";
 import StatsOverview from "@/components/applications/StatsOverview";
 import ExportButtons from "@/components/applications/ExportButtons";
+import QuickAddForm from "@/components/applications/QuickAddForm";
 import { getCurrentMonth, filterApplicationsByMonth } from "@/utils/monthUtils";
 import {
   showSuccessToast,
@@ -30,6 +30,7 @@ import {
 import EmptyState from "@/components/common/EmptyState";
 import { isInterviewToday } from "@/utils/interviewUtils";
 import { getFriendlyErrorMessage } from "@/utils/errorMessages";
+import { Zap } from "lucide-react";
 import Link from "next/link";
 
 // Lazy load heavy modals
@@ -294,12 +295,14 @@ export default function ApplicationsPage() {
           </p>
         </div>
         <div className="flex flex-col gap-3 items-end">
-          <button
-            onClick={openCreateModal}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition cursor-pointer"
-          >
-            + Nueva postulación
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={openCreateModal}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition cursor-pointer"
+            >
+              + Nueva postulación
+            </button>
+          </div>
           <ExportButtons applications={filteredApplications} />
         </div>
       </div>
@@ -317,13 +320,11 @@ export default function ApplicationsPage() {
         </div>
       )}
 
-      {/* Filter Panel */}
+      {/* Filter Panel - Above Month Selector */}
       {!isLoading && <FilterPanel onFilterChange={setAdvancedFilters} />}
 
       {/* Quick Add Form */}
-      {!isLoading && (
-        <QuickAddForm onSubmit={handleCreateOrUpdate} isLoading={isSaving} />
-      )}
+      <QuickAddForm onSubmit={handleCreateOrUpdate} isLoading={isSaving} />
 
       {/* Month Selector */}
       {!isLoading && (

@@ -129,28 +129,28 @@ export default function ApplicationsTable({
                         ? "Remover de favoritos"
                         : "Agregar a favoritos"
                     }
-                    className="px-3 py-1 text-sm bg-dusty-denim-600 hover:bg-dusty-denim-700 disabled:bg-dusty-denim-400 text-alabaster-grey-900 rounded transition cursor-pointer disabled:cursor-not-allowed"
+                    className="text-lg hover:opacity-80 transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {app.isFavorite ? "★" : "☆"}
                   </button>
                   <button
                     onClick={() => onView(app)}
                     disabled={isLoading}
-                    className="px-3 py-1 text-sm bg-dusk-blue-600 hover:bg-dusk-blue-700 disabled:bg-dusk-blue-400 text-alabaster-grey-900 rounded transition cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-1 text-sm bg-blue-50 hover:bg-blue-100 disabled:bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-300 rounded transition cursor-pointer disabled:cursor-not-allowed border-2 border-blue-400 dark:border-blue-600"
                   >
                     Ver
                   </button>
                   <button
                     onClick={() => onEdit(app)}
                     disabled={isLoading}
-                    className="px-3 py-1 text-sm bg-prussian-blue-600 hover:bg-prussian-blue-700 disabled:bg-prussian-blue-400 text-alabaster-grey-900 rounded transition cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-1 text-sm bg-green-50 hover:bg-green-100 disabled:bg-green-50 text-green-700 dark:bg-green-900/30 dark:hover:bg-green-900/50 dark:text-green-300 rounded transition cursor-pointer disabled:cursor-not-allowed border-2 border-green-400 dark:border-green-600"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => onDelete(app)}
                     disabled={isLoading}
-                    className="px-3 py-1 text-sm bg-dusk-blue-500 hover:bg-dusk-blue-600 disabled:bg-dusk-blue-300 text-alabaster-grey-900 rounded transition cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-1 text-sm bg-red-50 hover:bg-red-100 disabled:bg-red-50 text-red-700 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-300 rounded transition cursor-pointer disabled:cursor-not-allowed border-2 border-red-400 dark:border-red-600"
                   >
                     Eliminar
                   </button>

@@ -26,15 +26,13 @@ export default function Navbar() {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <nav className="bg-alabaster-grey-900 dark:bg-prussian-blue-500 border-b border-dusty-denim-300 dark:border-dusk-blue-600 z-50">
+    <nav className="bg-blue-50 dark:bg-blue-950/40 border-b border-blue-200 dark:border-blue-800 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/applications" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-prussian-blue-600 dark:bg-dusk-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-alabaster-grey-900 font-bold text-lg">
-                J
-              </span>
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 rounded-lg flex items-center justify-center shadow-md shadow-blue-500/40">
+              <span className="text-white font-bold text-lg">J</span>
             </div>
             <span className="font-bold text-xl text-ink-black-500 dark:text-alabaster-grey-500 hidden sm:inline">
               Joblyst
@@ -49,8 +47,8 @@ export default function Navbar() {
                 href={link.href}
                 className={`px-4 py-2 rounded-lg transition-colors ${
                   isActive(link.href)
-                    ? "bg-prussian-blue-600 text-alabaster-grey-900 dark:bg-dusk-blue-600 dark:text-alabaster-grey-900 font-medium"
-                    : "text-dusk-blue-500 dark:text-dusty-denim-600 hover:bg-alabaster-grey-800 dark:hover:bg-prussian-blue-600"
+                    ? "bg-blue-600 text-white dark:bg-blue-600 dark:text-white font-medium"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-blue-100 dark:hover:bg-blue-900/50"
                 }`}
               >
                 {link.label}
@@ -61,10 +59,10 @@ export default function Navbar() {
           {/* User Info & Logout */}
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex flex-col items-end text-sm">
-              <p className="font-medium text-ink-black-500 dark:text-alabaster-grey-500">
+              <p className="font-medium text-slate-800 dark:text-slate-200">
                 {user?.name || user?.email?.split("@")[0] || "Usuario"}
               </p>
-              <p className="text-xs text-dusk-blue-500 dark:text-dusty-denim-600">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 {user?.email}
               </p>
             </div>
@@ -80,7 +78,7 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 text-dusk-blue-500 dark:text-dusty-denim-600 hover:bg-alabaster-grey-800 dark:hover:bg-prussian-blue-600 rounded-lg"
+              className="md:hidden p-2 text-slate-700 dark:text-slate-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg"
             >
               {isOpen ? (
                 <X className="w-5 h-5" />
