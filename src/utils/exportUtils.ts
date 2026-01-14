@@ -20,34 +20,32 @@ export function exportToCSV(applications: Application[]): void {
     "Estado",
     "Fecha de Postulación",
     "Fuente",
-    "Salario (Rango)",
-    "Respuesta Recibida",
-    "Fecha Entrevista",
-    "Notas",
   ];
 
   // Map applications to CSV rows
   const rows = applications.map((app) => [
-    escapeCsvValue(app.company),
-    escapeCsvValue(app.jobTitle),
-    escapeCsvValue(app.location),
+    app.company,
+    app.jobTitle,
+    app.location,
     formatJobType(app.jobType),
     formatStatus(app.status),
     formatDate(app.dateApplied),
     app.source,
-    formatSalaryRange(app),
-    app.responseReceived ? "Sí" : "No",
-    app.interviewDate ? formatDate(app.interviewDate) : "-",
-    escapeCsvValue(app.notes || ""),
   ]);
 
-  // Build CSV content with proper formatting
-  const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join(
-    "\n"
-  );
+  // Build CSV content with proper formatting - use semicolon as delimiter for Excel in Spanish locale
+  const delimiter = ";";
+  const csv = [
+    headers.join(delimiter),
+    ...rows.map((row) => row.join(delimiter)),
+  ].join("\n");
+
+  // Add UTF-8 BOM for Excel to recognize it as CSV with proper encoding
+  const BOM = "\uFEFF";
+  const csvWithBOM = BOM + csv;
 
   // Download
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob([csvWithBOM], { type: "text/csv;charset=utf-8" });
   const link = document.createElement("a");
   const url = URL.createObjectURL(blob);
   link.setAttribute("href", url);
@@ -80,7 +78,7 @@ export async function exportToPDF(applications: Application[]): Promise<void> {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 10;
-    const cellHeight = 8;
+    const cellHeight = 10;
     let yPosition = 35;
 
     // Title
@@ -110,7 +108,7 @@ export async function exportToPDF(applications: Application[]): Promise<void> {
       { align: "center" }
     );
 
-    // Table headers
+    // Table headers - Solo columna Empresa por ahora
     const headers = [
       "Empresa",
       "Puesto",
@@ -119,10 +117,8 @@ export async function exportToPDF(applications: Application[]): Promise<void> {
       "Estado",
       "Fecha",
       "Fuente",
-      "Salario",
-      "Respuesta",
     ];
-    const columnWidths = [25, 25, 18, 15, 15, 15, 15, 18, 12];
+    const columnWidths = [22, 22, 18, 12, 12, 15, 12];
     const totalWidth = columnWidths.reduce((a, b) => a + b, 0);
     const scale = (pageWidth - 2 * margin) / totalWidth;
     const scaledColWidths = columnWidths.map((w) => w * scale);
@@ -131,14 +127,14 @@ export async function exportToPDF(applications: Application[]): Promise<void> {
     doc.setFillColor(59, 130, 246);
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(8);
+    doc.setFontSize(9);
 
     let xPos = margin;
     headers.forEach((header, idx) => {
       const cellWidth = scaledColWidths[idx];
       doc.rect(xPos, yPosition, cellWidth, cellHeight, "F");
-      doc.text(header, xPos + 1, yPosition + cellHeight / 2 + 1.2, {
-        maxWidth: cellWidth - 2,
+      doc.text(header, xPos + 2, yPosition + cellHeight / 2 + 1.5, {
+        maxWidth: cellWidth - 4,
         align: "left",
       });
       xPos += cellWidth;
@@ -160,14 +156,14 @@ export async function exportToPDF(applications: Application[]): Promise<void> {
         doc.setFillColor(59, 130, 246);
         doc.setTextColor(255, 255, 255);
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(8);
+        doc.setFontSize(9);
 
         xPos = margin;
         headers.forEach((header, headerIdx) => {
           const cellWidth = scaledColWidths[headerIdx];
           doc.rect(xPos, yPosition, cellWidth, cellHeight, "F");
-          doc.text(header, xPos + 1, yPosition + cellHeight / 2 + 1.2, {
-            maxWidth: cellWidth - 2,
+          doc.text(header, xPos + 2, yPosition + cellHeight / 2 + 1.5, {
+            maxWidth: cellWidth - 4,
             align: "left",
           });
           xPos += cellWidth;
@@ -193,10 +189,6 @@ export async function exportToPDF(applications: Application[]): Promise<void> {
         formatStatus(app.status),
         formatDate(app.dateApplied),
         app.source,
-        app.salaryMin && app.salaryMax
-          ? `${app.salaryMin}-${app.salaryMax}`
-          : app.salaryMin || app.salaryMax || "-",
-        app.responseReceived ? "Sí" : "No",
       ];
 
       xPos = margin;
