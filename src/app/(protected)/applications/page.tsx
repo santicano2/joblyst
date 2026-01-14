@@ -283,7 +283,7 @@ export default function ApplicationsPage() {
   return (
     <div>
       {/* Header */}
-      <div className="flex justify-between items-start mb-8 gap-6">
+      <div className="flex justify-between items-start mb-4 gap-6">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
             Mis Postulaciones
@@ -302,14 +302,14 @@ export default function ApplicationsPage() {
             >
               + Nueva postulación
             </button>
+            <ExportButtons applications={filteredApplications} />
           </div>
-          <ExportButtons applications={filteredApplications} />
         </div>
       </div>
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg">
+        <div className="mb-3 p-4 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg">
           {error}
           <button
             onClick={() => setError(null)}
@@ -320,8 +320,10 @@ export default function ApplicationsPage() {
         </div>
       )}
 
-      {/* Filter Panel - Above Month Selector */}
-      {!isLoading && <FilterPanel onFilterChange={setAdvancedFilters} />}
+      {/* Filter Panel */}
+      <div className="mb-3">
+        {!isLoading && <FilterPanel onFilterChange={setAdvancedFilters} />}
+      </div>
 
       {/* Quick Add Form */}
       <QuickAddForm onSubmit={handleCreateOrUpdate} isLoading={isSaving} />

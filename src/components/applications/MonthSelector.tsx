@@ -44,7 +44,7 @@ export default function MonthSelector({
   });
 
   return (
-    <div className="flex items-center gap-4 mb-8 bg-white dark:bg-slate-800 p-4 rounded-lg shadow">
+    <div className="flex items-center gap-4 mb-6 bg-white dark:bg-slate-800 p-4 rounded-lg shadow">
       <button
         onClick={previousMonth}
         className="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition cursor-pointer"

@@ -114,7 +114,7 @@ export default function QuickAddForm({
   }
 
   return (
-    <div className="mb-8">
+    <div className="mb-3">
       {!isExpanded ? (
         <button
           onClick={() => setIsExpanded(true)}

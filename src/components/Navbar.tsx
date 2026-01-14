@@ -69,10 +69,10 @@ export default function Navbar() {
 
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors text-sm flex items-center gap-2 border-2 border-red-600 cursor-pointer"
+              className="px-2 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors text-sm flex items-center justify-center border-2 border-red-600 cursor-pointer"
+              title="Cerrar sesión"
             >
               <LogOut className="w-4 h-4" />
-              Logout
             </button>
 
             {/* Mobile Menu Button */}

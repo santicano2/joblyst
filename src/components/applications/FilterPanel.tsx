@@ -63,7 +63,7 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
   );
 
   return (
-    <div className="mb-6">
+    <div className={`${isOpen ? "w-full" : "mb-6"}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition cursor-pointer"

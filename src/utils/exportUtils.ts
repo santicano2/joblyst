@@ -122,7 +122,7 @@ export async function exportToPDF(applications: Application[]): Promise<void> {
       "Salario",
       "Respuesta",
     ];
-    const columnWidths = [25, 25, 18, 15, 15, 18, 15, 20, 12];
+    const columnWidths = [25, 25, 18, 15, 15, 15, 15, 18, 12];
     const totalWidth = columnWidths.reduce((a, b) => a + b, 0);
     const scale = (pageWidth - 2 * margin) / totalWidth;
     const scaledColWidths = columnWidths.map((w) => w * scale);
@@ -131,15 +131,17 @@ export async function exportToPDF(applications: Application[]): Promise<void> {
     doc.setFillColor(59, 130, 246);
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
+    doc.setFontSize(8);
 
     let xPos = margin;
     headers.forEach((header, idx) => {
-      doc.rect(xPos, yPosition, scaledColWidths[idx], cellHeight, "F");
-      doc.text(header, xPos + 1, yPosition + cellHeight / 2 + 1.5, {
-        maxWidth: scaledColWidths[idx] - 2,
+      const cellWidth = scaledColWidths[idx];
+      doc.rect(xPos, yPosition, cellWidth, cellHeight, "F");
+      doc.text(header, xPos + 1, yPosition + cellHeight / 2 + 1.2, {
+        maxWidth: cellWidth - 2,
+        align: "left",
       });
-      xPos += scaledColWidths[idx];
+      xPos += cellWidth;
     });
 
     yPosition += cellHeight;
@@ -158,21 +160,17 @@ export async function exportToPDF(applications: Application[]): Promise<void> {
         doc.setFillColor(59, 130, 246);
         doc.setTextColor(255, 255, 255);
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(9);
+        doc.setFontSize(8);
 
         xPos = margin;
         headers.forEach((header, headerIdx) => {
-          doc.rect(
-            xPos,
-            yPosition,
-            scaledColWidths[headerIdx],
-            cellHeight,
-            "F"
-          );
-          doc.text(header, xPos + 1, yPosition + cellHeight / 2 + 1.5, {
-            maxWidth: scaledColWidths[headerIdx] - 2,
+          const cellWidth = scaledColWidths[headerIdx];
+          doc.rect(xPos, yPosition, cellWidth, cellHeight, "F");
+          doc.text(header, xPos + 1, yPosition + cellHeight / 2 + 1.2, {
+            maxWidth: cellWidth - 2,
+            align: "left",
           });
-          xPos += scaledColWidths[headerIdx];
+          xPos += cellWidth;
         });
 
         yPosition += cellHeight;
