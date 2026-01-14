@@ -36,11 +36,11 @@ export default function ExportButtons({ applications }: ExportButtonsProps) {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-col sm:flex-row gap-2">
       <button
         onClick={handleExportCSV}
         disabled={isExporting || applications.length === 0}
-        className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white rounded-lg transition cursor-pointer border-2 border-green-600 disabled:border-green-400 disabled:cursor-not-allowed"
+        className="flex items-center justify-center sm:justify-start gap-2 px-3 sm:px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white text-sm sm:text-base rounded-lg transition cursor-pointer border-2 border-green-600 disabled:border-green-400 disabled:cursor-not-allowed"
       >
         <svg
           className="w-5 h-5"
@@ -61,7 +61,7 @@ export default function ExportButtons({ applications }: ExportButtonsProps) {
       <button
         onClick={handleExportPDF}
         disabled={isExporting || applications.length === 0}
-        className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white rounded-lg transition cursor-pointer border-2 border-red-600 disabled:border-red-400 disabled:cursor-not-allowed"
+        className="flex items-center justify-center sm:justify-start gap-2 px-3 sm:px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white text-sm sm:text-base rounded-lg transition cursor-pointer border-2 border-red-600 disabled:border-red-400 disabled:cursor-not-allowed"
       >
         <svg
           className="w-5 h-5"

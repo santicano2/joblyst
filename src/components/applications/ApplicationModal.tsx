@@ -121,16 +121,16 @@ export default function ApplicationModal({
       role="presentation"
     >
       <div
-        className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scaleIn"
+        className="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-sm sm:max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto animate-scaleIn"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-6 flex justify-between items-center">
+        <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-4 sm:p-6 flex justify-between items-center gap-4">
           <h2
             id="modal-title"
-            className="text-2xl font-bold text-slate-900 dark:text-white"
+            className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white"
           >
             {application ? "Editar postulación" : "Nueva postulación"}
           </h2>
@@ -146,7 +146,7 @@ export default function ApplicationModal({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
           {error && (
             <div
               className="p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg text-sm"
@@ -156,7 +156,7 @@ export default function ApplicationModal({
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* jobTitle */}
             <div>
               <label

@@ -31,7 +31,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/applications" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 rounded-lg flex items-center justify-center shadow-md shadow-blue-500/40">
+            <div className="w-8 h-8 bg-linear-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 rounded-lg flex items-center justify-center shadow-md shadow-blue-500/40">
               <span className="text-white font-bold text-lg">J</span>
             </div>
             <span className="font-bold text-xl text-ink-black-500 dark:text-alabaster-grey-500 hidden sm:inline">

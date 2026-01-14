@@ -93,8 +93,8 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
       </button>
 
       {isOpen && (
-        <div className="mt-4 p-6 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-4 p-3 sm:p-6 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             {/* Search */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -251,17 +251,17 @@ export default function FilterPanel({ onFilterChange }: FilterPanelProps) {
           </div>
 
           {/* Actions */}
-          <div className="mt-6 flex gap-3 justify-end">
+          <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-3 justify-end">
             <button
               onClick={handleReset}
               disabled={!hasActiveFilters}
-              className="px-4 py-2 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm sm:text-base text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Limpiar
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
+              className="px-4 py-2 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer"
             >
               Aplicar
             </button>

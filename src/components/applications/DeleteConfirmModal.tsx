@@ -19,11 +19,11 @@ export default function DeleteConfirmModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fadeIn">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 max-w-md w-full animate-scaleIn">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-4 sm:p-6 max-w-md w-full animate-scaleIn">
+        <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-4">
           ¿Eliminar postulación?
         </h2>
-        <p className="text-slate-600 dark:text-slate-400 mb-6">
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mb-6">
           ¿Estás seguro de que quieres eliminar la postulación en{" "}
           <strong>{itemName}</strong>? Esta acción no se puede deshacer.
         </p>

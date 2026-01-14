@@ -3,8 +3,6 @@
 ## TODO:
 
 - Mejorar landing
-- Mejorar dashboard
-- Mejorar CSV y PDF
 
 ## 🚀 Email Notifications & Cron Jobs
 

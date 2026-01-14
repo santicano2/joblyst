@@ -59,14 +59,16 @@ export default function DetailModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fadeIn">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scaleIn">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl w-full max-w-sm sm:max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto animate-scaleIn">
         {/* Header */}
-        <div className="sticky top-0 bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 px-6 py-6 flex justify-between items-start">
+        <div className="sticky top-0 bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 px-4 sm:px-6 py-4 sm:py-6 flex justify-between items-start gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-1">
+            <h2 className="text-lg sm:text-2xl font-bold text-white mb-1">
               {application.jobTitle}
             </h2>
-            <p className="text-blue-100">{application.company}</p>
+            <p className="text-sm sm:text-base text-blue-100">
+              {application.company}
+            </p>
           </div>
           <div className="flex items-center gap-2">
             {onToggleFavorite && (
@@ -96,7 +98,7 @@ export default function DetailModal({
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-6">
           {/* Estado y Tipo */}
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -124,7 +126,7 @@ export default function DetailModal({
           <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Ubicación y Fuente */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-semibold text-slate-600 dark:text-slate-400 block mb-2">
                 Ubicación
@@ -239,7 +241,7 @@ export default function DetailModal({
           )}
 
           {/* Fechas */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-semibold text-slate-600 dark:text-slate-400 block mb-2">
                 Fecha de Postulación
@@ -263,7 +265,7 @@ export default function DetailModal({
           <hr className="border-slate-200 dark:border-slate-700" />
 
           {/* Salario */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-semibold text-slate-600 dark:text-slate-400 block mb-2">
                 Salario Mínimo

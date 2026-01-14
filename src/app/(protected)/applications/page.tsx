@@ -294,16 +294,19 @@ export default function ApplicationsPage() {
             {filteredApplications.length}
           </p>
         </div>
-        <div className="flex flex-col gap-3 items-end">
-          <div className="flex gap-2">
-            <button
-              onClick={openCreateModal}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition cursor-pointer"
-            >
-              + Nueva postulación
-            </button>
+        <div className="flex flex-col gap-3">
+          <button
+            onClick={openCreateModal}
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition cursor-pointer"
+          >
+            + Nueva postulación
+          </button>
+          <div className="flex flex-col sm:hidden gap-2">
             <ExportButtons applications={filteredApplications} />
           </div>
+        </div>
+        <div className="hidden sm:flex flex-col gap-3 items-end">
+          <ExportButtons applications={filteredApplications} />
         </div>
       </div>
 
