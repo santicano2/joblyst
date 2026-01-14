@@ -19,8 +19,8 @@ export default function CallbackPage() {
         // Verificar que la sesión se creó correctamente
         await checkSession();
 
-        // Redirigir al dashboard
-        router.push("/dashboard");
+        // Redirigir a aplicaciones
+        router.push("/applications");
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Error al procesar autenticación"
@@ -44,7 +44,7 @@ export default function CallbackPage() {
               Procesando autenticación...
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Te estamos redirigiendo al dashboard
+              Te estamos redirigiendo a aplicaciones
             </p>
           </>
         ) : error ? (
