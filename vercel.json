@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/check-interviews",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/check-no-response",
+      "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/cron/weekly-summary",
+      "schedule": "0 17 * * 5"
+    }
+  ]
+}
